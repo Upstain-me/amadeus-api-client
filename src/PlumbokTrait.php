@@ -10,5 +10,4 @@ Autoload::register('Upstain\\AmadeusApiClient', new FileCache(__DIR__ . '/../cac
 
 trait PlumbokTrait
 {
-
 }

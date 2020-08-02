@@ -2,12 +2,9 @@
 
 namespace Upstain\AmadeusApiClient;
 
-use Plumbok\Annotation\Data;
 use Plumbok\Annotation\Getter;
 use Plumbok\Annotation\Setter;
 use Plumbok\Annotation\ToString;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @ToString(property = "baseUrl")
@@ -44,5 +41,4 @@ class Configuration
      * @Setter
      */
     private string $clientSecret;
-
 }

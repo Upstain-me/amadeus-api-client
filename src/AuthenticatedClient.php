@@ -3,32 +3,36 @@
 namespace Upstain\AmadeusApiClient;
 
 use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\RequiredArgsConstructor;
+use Plumbok\Annotation\Setter;
 
 /**
- * @RequiredArgsConstructor
- * @method void __construct(string $expiresIn, string $tokenType, string $accessToken)
  * @method string getExpiresIn()
+ * @method void setExpiresIn(string $expiresIn)
  * @method string getTokenType()
+ * @method void setTokenType(string $tokenType)
  * @method string getAccessToken()
+ * @method void setAccessToken(string $accessToken)
  */
-class AuthenticatedClient
+class AuthenticatedClient extends Client
 {
     /**
      * @var string
      * @Getter
+     * @Setter
      */
     private string $expiresIn;
 
     /**
      * @var string
      * @Getter
+     * @Setter
      */
     private string $tokenType;
 
     /**
      * @var string
      * @Getter
+     * @Setter
      */
     private string $accessToken;
 }

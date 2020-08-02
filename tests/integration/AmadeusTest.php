@@ -16,9 +16,8 @@ class AmadeusTest extends Unit
         $config = new Configuration();
         $config->setClientId($_ENV['AMADEUS_API_CLIENT_ID']);
         $config->setClientSecret($_ENV['AMADEUS_API_CLIENT_SECRET']);
-        $amadeusClient = new Amadeus($config);
-
-        $authenticatedClient = $amadeusClient->authenticate();
+        $amadeus = new Amadeus();
+        $authenticatedClient = $amadeus->configure($config)->authenticate();
 
         self::assertEquals('Bearer', $authenticatedClient->getTokenType());
     }
