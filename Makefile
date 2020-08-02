@@ -49,10 +49,10 @@ reset-sf: disable-xdebug
 
 # xdebug causes performance issues, disable it for commands,migrations etc
 disable-xdebug:
-	docker exec -i php dxd || true ;\
+	docker-compose exec php bash -c "dxd || true" ;\
 
 enable-xdebug:
-	docker exec -i php exd || true ;\
+	docker-compose exec php bash -c "exd || true" ;\
 
 composer-install:
 	docker-compose exec php composer install ;\

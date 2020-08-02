@@ -17,11 +17,18 @@
             "email": "bene.lori89@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/benelori/plumbok"
+        }
+    ],
     "require": {
         "php": "^7.4",
         "ext-json": "*",
         "symfony/cache-contracts": "^2.0",
-        "symfony/http-client": "^5.0"
+        "symfony/http-client": "^5.0",
+        "benelori/plumbok": "^0.10.4"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.32",

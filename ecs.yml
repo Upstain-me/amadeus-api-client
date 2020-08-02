@@ -10,3 +10,6 @@ parameters:
   exclude_files:
     # generated files
     - 'tests/_support/_generated/*'
+
+  skip:
+    SlevomatCodingStandard\Sniffs\Classes\UnusedPrivateElementsSniff: ~ # We use this because of Plumbok

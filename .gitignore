@@ -1,2 +1,6 @@
 /vendor/
 .env.local
+.env.test.local
+
+# Plumbok cache
+cache
