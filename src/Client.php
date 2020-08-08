@@ -5,6 +5,7 @@ namespace Upstain\AmadeusApiClient;
 use Plumbok\Annotation\Getter;
 use Plumbok\Annotation\Setter;
 use Psr\Cache\CacheItemInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -36,10 +37,14 @@ class Client
             return $this->auth();
         }
 
-        return $cache->get(
-            CacheConstant::AUTH_CACHE,
-            fn (CacheItemInterface $item): AuthenticatedClient => $this->cacheCallback($item)
-        );
+        try {
+            return $cache->get(
+                CacheConstant::AMADEUS_AUTH_CACHE,
+                fn (CacheItemInterface $item): AuthenticatedClient => $this->cacheCallback($item)
+            );
+        } catch (InvalidArgumentException $e) {
+            throw AmadeusException::authCacheError($e);
+        }
     }
 
     private function cacheCallback(CacheItemInterface $item): AuthenticatedClient
@@ -80,6 +85,7 @@ class Client
             $authClient->setExpiresIn($content['expires_in']);
             $authClient->setAccessToken($content['access_token']);
             $authClient->setTokenType($content['token_type']);
+            $authClient->setConfiguration($this->getConfiguration());
             return $authClient;
         } catch (ClientExceptionInterface |
             DecodingExceptionInterface |

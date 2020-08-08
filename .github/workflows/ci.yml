@@ -33,7 +33,7 @@ jobs:
         run: cp .env .env.local && vendor/bin/codecept run
 
       - name: Static Type Analysis
-        run: vendor/bin/phpstan analyse src --level 8
+        run: vendor/bin/phpstan analyse
 
       - name: Coding standards
         run: vendor/bin/ecs check

@@ -4,6 +4,7 @@ namespace Upstain\AmadeusApiClient;
 
 use Plumbok\Annotation\Getter;
 use Plumbok\Annotation\Setter;
+use Upstain\AmadeusApiClient\Shopping\Shopping;
 
 /**
  * @method string getExpiresIn()
@@ -35,4 +36,9 @@ class AuthenticatedClient extends Client
      * @Setter
      */
     private string $accessToken;
+
+    public function shopping(): Shopping
+    {
+        return new Shopping($this);
+    }
 }
