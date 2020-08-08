@@ -102,6 +102,9 @@ class FlightOffer extends ResponseModelBase
      */
     protected array $travelerPricings;
 
+    /**
+     * @param mixed $data
+     */
     public function __construct($data)
     {
         $excludedProperties = [
@@ -112,5 +115,9 @@ class FlightOffer extends ResponseModelBase
             'travelerPricings',
         ];
         parent::__construct($data, $excludedProperties);
+
+        foreach ($data['itineraries'] as $itinerary) {
+            $this->itineraries[] = new Itinerary($itinerary);
+        }
     }
 }
