@@ -33,7 +33,6 @@ class FlightOffersSearchResponse
     /**
      * @var FlightOffer[]
      * @Getter
-     * @Setter
      */
     private array $data;
 

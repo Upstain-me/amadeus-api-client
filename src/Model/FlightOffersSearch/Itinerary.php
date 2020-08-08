@@ -35,8 +35,10 @@ class Itinerary extends ResponseModelBase
         ];
         parent::__construct($data, $excludedProperties);
 
-        foreach ($data['segments'] as $segment) {
-            $this->segments[] = new Segment($segment);
+        if ($data['segments']) {
+            foreach ($data['segments'] as $segment) {
+                $this->segments[] = new Segment($segment);
+            }
         }
     }
 }

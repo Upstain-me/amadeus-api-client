@@ -111,13 +111,28 @@ class FlightOffer extends ResponseModelBase
             'itineraries',
             'price',
             'pricingOptions',
-            'validatingAirlineCodes',
             'travelerPricings',
         ];
         parent::__construct($data, $excludedProperties);
 
-        foreach ($data['itineraries'] as $itinerary) {
-            $this->itineraries[] = new Itinerary($itinerary);
+        if ($data['itineraries']) {
+            foreach ($data['itineraries'] as $itinerary) {
+                $this->itineraries[] = new Itinerary($itinerary);
+            }
+        }
+
+        if ($data['price']) {
+            $this->price = new Price($data['price']);
+        }
+
+        if ($data['pricingOptions']) {
+            $this->pricingOptions = new PricingOptions($data['pricingOptions']);
+        }
+
+        if ($data['travelerPricings']) {
+            foreach ($data['travelerPricings'] as $travelerPricing) {
+                $this->travelerPricings[] = new TravelerPricing($travelerPricing);
+            }
         }
     }
 }
