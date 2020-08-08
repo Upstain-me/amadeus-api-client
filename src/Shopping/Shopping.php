@@ -44,12 +44,12 @@ class Shopping
     ): FlightOffersSearchResponse {
         if ($cacheConfig) {
             try {
-                return $cacheConfig->getCache()->get(
+                $rawResponse = $cacheConfig->getCache()->get(
                     \implode('_', [
                         CacheConstant::AMADEUS_FLIGHT_OFFERS_SEARCH_CACHE,
                         $cacheConfig->getCacheKeyGenerator()->generate()
                     ]),
-                    fn (CacheItemInterface $item): FlightOffersSearchResponse => $this->cacheCallback(
+                    fn (CacheItemInterface $item): array => $this->cacheCallback(
                         $item,
                         $flightOffersSearchRequest
                     )
@@ -57,21 +57,27 @@ class Shopping
             } catch (InvalidArgumentException $e) {
                 throw AmadeusException::flightOffersSearchCacheError($e);
             }
+        } else {
+            $rawResponse = $this->request($flightOffersSearchRequest);
         }
 
-        return $this->request($flightOffersSearchRequest);
+
+        $response = new FlightOffersSearchResponse();
+        $response->setRawResponse($rawResponse);
+
+        return $response;
     }
 
     /**
      * @param CacheItemInterface $item
      * @param FlightOffersSearchRequest $flightOffersSearchRequest
-     * @return FlightOffersSearchResponse
+     * @return array<string, mixed>
      * @throws AmadeusException
      */
     protected function cacheCallback(
         CacheItemInterface $item,
         FlightOffersSearchRequest $flightOffersSearchRequest
-    ): FlightOffersSearchResponse {
+    ): array {
         $token = $this->request($flightOffersSearchRequest);
         $item->expiresAfter(new \DateInterval('P1D'));
 
@@ -80,10 +86,10 @@ class Shopping
 
     /**
      * @param FlightOffersSearchRequest $flightOffersSearchRequest
-     * @return FlightOffersSearchResponse
+     * @return array<string, mixed>
      * @throws AmadeusException
      */
-    protected function request(FlightOffersSearchRequest $flightOffersSearchRequest): FlightOffersSearchResponse
+    protected function request(FlightOffersSearchRequest $flightOffersSearchRequest): array
     {
         try {
             $client = HttpClient::create([
@@ -100,12 +106,8 @@ class Shopping
                     'query' => $flightOffersSearchRequest->toArray(),
                 ],
             );
-            $content = $response->toArray(false);
 
-            $response = new FlightOffersSearchResponse();
-            $response->setRawResponse($content);
-
-            return $response;
+            return $response->toArray();
         } catch (ClientExceptionInterface |
             DecodingExceptionInterface |
             RedirectionExceptionInterface |

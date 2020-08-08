@@ -3,7 +3,13 @@
 namespace Upstain\AmadeusApiClient\Tests\Integration;
 
 use Codeception\Test\Unit;
+use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Symfony\Contracts\Cache\CacheInterface;
 use Upstain\AmadeusApiClient\Amadeus;
+use Upstain\AmadeusApiClient\AuthenticatedClient;
+use Upstain\AmadeusApiClient\CacheConfigInterface;
+use Upstain\AmadeusApiClient\CacheKeyGeneratorInterface;
 use Upstain\AmadeusApiClient\Configuration;
 use Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffersSearchRequest;
 use Upstain\AmadeusApiClient\PlumbokTrait;
@@ -11,6 +17,7 @@ use Upstain\AmadeusApiClient\PlumbokTrait;
 class AmadeusTest extends Unit
 {
     use PlumbokTrait;
+    use ProphecyTrait;
 
     public function testAuthenticate()
     {
@@ -21,23 +28,52 @@ class AmadeusTest extends Unit
         $authenticatedClient = $amadeus->configure($config)->authenticate();
 
         self::assertEquals('Bearer', $authenticatedClient->getTokenType());
+
+        return $authenticatedClient;
     }
 
-    public function testFlightOffersSearch()
+    /**
+     * @depends testAuthenticate
+     * @param AuthenticatedClient $authenticatedClient
+     * @throws \Upstain\AmadeusApiClient\Exception\AmadeusException
+     */
+    public function testFlightOffersSearch(AuthenticatedClient $authenticatedClient)
     {
-        $config = new Configuration();
-        $config->setClientId($_ENV['AMADEUS_API_CLIENT_ID']);
-        $config->setClientSecret($_ENV['AMADEUS_API_CLIENT_SECRET']);
-        $amadeus = new Amadeus();
-        $authenticatedClient = $amadeus->configure($config)->authenticate();
-
         $request = new FlightOffersSearchRequest();
         $request->setOriginLocationCode('SYD');
         $request->setDestinationLocationCode('BKK');
         $request->setDepartureDate(new \DateTime());
         $request->setAdults(1);
-        $response = $authenticatedClient->shopping()->flightOffersSearch($request);
+        $response = $authenticatedClient->shopping()->flightOffersSearch($request, $this->getCacheConfig());
 
-        self::assertEquals($response->getRawResponse()['data'][0]['type'], 'flight-offer');
+        self::assertEquals(250, $response->transformRawResponse()->getMeta()->getCount());
+        self::assertEquals($response->getRawResponse()['dictionaries']['locations'], $response->transformRawResponse()->getDictionaries()->getLocations());
+        self::assertEquals('GDS', $response->transformRawResponse()->getData()[0]->getSource());
+    }
+
+    /**
+     * @return \Prophecy\Prophecy\ObjectProphecy|CacheConfigInterface
+     * @throws \JsonException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function getCacheConfig()
+    {
+        $response = \json_decode(
+            \file_get_contents(__DIR__ . '/../_data/flightOffersSearch/response.json'),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any(), Argument::any())->willReturn($response);
+
+        $cacheKeyGenerator = $this->prophesize(CacheKeyGeneratorInterface::class);
+        $cacheKeyGenerator->generate()->willReturn('test');
+
+        $cacheConfig = $this->prophesize(CacheConfigInterface::class);
+        $cacheConfig->getCacheKeyGenerator()->willReturn($cacheKeyGenerator->reveal());
+        $cacheConfig->getCache()->willReturn($cache->reveal());
+
+        return $cacheConfig->reveal();
     }
 }
