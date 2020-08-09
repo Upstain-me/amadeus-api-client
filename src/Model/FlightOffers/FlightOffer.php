@@ -21,6 +21,7 @@ use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
  * @method \Upstain\AmadeusApiClient\Model\FlightOffers\PricingOptions getPricingOptions()
  * @method string[] getValidatingAirlineCodes()
  * @method \Upstain\AmadeusApiClient\Model\FlightOffers\TravelerPricing[] getTravelerPricings()
+ * @method bool isPaymentCardRequired()
  */
 class FlightOffer extends FromArrayModelBase
 {
@@ -103,6 +104,12 @@ class FlightOffer extends FromArrayModelBase
     protected array $travelerPricings;
 
     /**
+     * @var bool
+     * @Getter
+     */
+    protected bool $paymentCardRequired;
+
+    /**
      * @param mixed $data
      */
     public function __construct($data)
@@ -115,21 +122,21 @@ class FlightOffer extends FromArrayModelBase
         ];
         parent::__construct($data, $excludedProperties);
 
-        if ($data['itineraries']) {
+        if (isset($data['itineraries'])) {
             foreach ($data['itineraries'] as $itinerary) {
                 $this->itineraries[] = new Itinerary($itinerary);
             }
         }
 
-        if ($data['price']) {
+        if (isset($data['price'])) {
             $this->price = new Price($data['price']);
         }
 
-        if ($data['pricingOptions']) {
+        if (isset($data['pricingOptions'])) {
             $this->pricingOptions = new PricingOptions($data['pricingOptions']);
         }
 
-        if ($data['travelerPricings']) {
+        if (isset($data['travelerPricings'])) {
             foreach ($data['travelerPricings'] as $travelerPricing) {
                 $this->travelerPricings[] = new TravelerPricing($travelerPricing);
             }

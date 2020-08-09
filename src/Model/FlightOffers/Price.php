@@ -14,6 +14,7 @@ use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
  * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Fee[] getFees()
  * @method string getGrandTotal()
  * @method \Upstain\AmadeusApiClient\Model\FlightOffers\AdditionalService[] getAdditionalServices()
+ * @method string getRefundableTaxes()
  */
 class Price extends FromArrayModelBase
 {
@@ -53,6 +54,17 @@ class Price extends FromArrayModelBase
      */
     protected array $additionalServices;
 
+    /**
+     * @var string
+     * @Getter
+     */
+    protected string $refundableTaxes;
+
+    /**
+     * @var Tax[]
+     */
+    protected array $taxes;
+
     public function __construct($data)
     {
         $excludedProperties = [
@@ -70,6 +82,13 @@ class Price extends FromArrayModelBase
         if (isset($data['additionalServices'])) {
             foreach ($data['additionalServices'] as $additionalService) {
                 $this->additionalServices[] = new AdditionalService($additionalService);
+            }
+        }
+
+        // Needed for flight offers pricing API.
+        if (isset($data['taxes'])) {
+            foreach ($data['taxes'] as $tax) {
+                $this->taxes[] = new Tax($tax);
             }
         }
     }

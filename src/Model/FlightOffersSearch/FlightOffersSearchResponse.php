@@ -2,17 +2,10 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
 use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
 use Upstain\AmadeusApiClient\Model\ResponseBase;
 
-/**
- * Class FlightOffersSearchResponse
- *
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer[] getData()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Dictionaries getDictionaries()
- */
 class FlightOffersSearchResponse extends ResponseBase
 {
     /**
@@ -21,27 +14,19 @@ class FlightOffersSearchResponse extends ResponseBase
     private Meta $meta;
 
     /**
-     * @var \Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer[]
-     * @Getter
+     * @var FlightOffer[]
      */
-    private array $data;
-
-    /**
-     * @var Dictionaries
-     * @Getter
-     */
-    private Dictionaries $dictionaries;
+    protected array $data;
 
     /**
      * @return $this
      */
     public function transformRawResponse(): FlightOffersSearchResponse
     {
+        parent::transformRawResponse();
+
         if (isset($this->rawResponse['meta'])) {
             $this->meta = new Meta($this->rawResponse['meta']);
-        }
-        if (isset($this->rawResponse['dictionaries'])) {
-            $this->dictionaries = new Dictionaries($this->rawResponse['dictionaries']);
         }
 
         if (isset($this->rawResponse['data'])) {
@@ -61,5 +46,13 @@ class FlightOffersSearchResponse extends ResponseBase
     public function getMeta(): Meta
     {
         return $this->meta;
+    }
+
+    /**
+     * @return FlightOffer[]
+     */
+    public function getData(): array
+    {
+        return $this->data;
     }
 }
