@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e59a8d478715e7f2ba7c4cb389a6799",
+    "content-hash": "6965b9761bbc394ecec308d65acdf179",
     "packages": [
         {
             "name": "benelori/plumbok",
-            "version": "0.10.4",
+            "version": "0.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/benelori/plumbok.git",
-                "reference": "ce3ad11008f751e09765ce9e2138c0d79488e8c9"
+                "reference": "006c12a9de029da16b621dd38dbf4bdaa9ebd498"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/benelori/plumbok/zipball/ce3ad11008f751e09765ce9e2138c0d79488e8c9",
-                "reference": "ce3ad11008f751e09765ce9e2138c0d79488e8c9",
+                "url": "https://api.github.com/repos/benelori/plumbok/zipball/006c12a9de029da16b621dd38dbf4bdaa9ebd498",
+                "reference": "006c12a9de029da16b621dd38dbf4bdaa9ebd498",
                 "shasum": ""
             },
             "require": {
@@ -64,9 +64,9 @@
             ],
             "description": "Runtime Code Generator like Lombok for PHP",
             "support": {
-                "source": "https://github.com/benelori/plumbok/tree/0.10.4"
+                "source": "https://github.com/benelori/plumbok/tree/0.10.5"
             },
-            "time": "2020-08-01T17:19:55+00:00"
+            "time": "2020-08-08T10:44:36+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -304,6 +304,74 @@
                 }
             ],
             "time": "2020-05-25T17:44:05+00:00"
+        },
+        {
+            "name": "marc-mabe/php-enum",
+            "version": "v4.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marc-mabe/php-enum.git",
+                "reference": "29b5b7d8fc7b03a63d6af798847ad23146851e80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marc-mabe/php-enum/zipball/29b5b7d8fc7b03a63d6af798847ad23146851e80",
+                "reference": "29b5b7d8fc7b03a63d6af798847ad23146851e80",
+                "shasum": ""
+            },
+            "require": {
+                "ext-reflection": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "phpbench/phpbench": "^0.16.10",
+                "phpstan/phpstan": "^0.12.19",
+                "phpunit/phpunit": "^7.5.20",
+                "vimeo/psalm": "^3.11.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.3-dev",
+                    "dev-3.x": "3.1-dev",
+                    "dev-2.x": "2.3-dev",
+                    "dev-1.x": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MabeEnum\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Marc Bennewitz",
+                    "email": "dev@mabe.berlin",
+                    "homepage": "http://mabe.berlin/",
+                    "role": "Lead"
+                }
+            ],
+            "description": "Simple and fast implementation of enumerations with native PHP",
+            "homepage": "https://github.com/marc-mabe/php-enum",
+            "keywords": [
+                "enum",
+                "enum-map",
+                "enum-set",
+                "enumeration",
+                "enumerator",
+                "enummap",
+                "enumset",
+                "map",
+                "set",
+                "type",
+                "type-hint",
+                "typehint"
+            ],
+            "time": "2020-04-27T09:55:52+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -2454,6 +2522,52 @@
             "time": "2020-06-23T06:23:06+00:00"
         },
         {
+            "name": "marc-mabe/php-enum-phpstan",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/marc-mabe/php-enum-phpstan.git",
+                "reference": "5872b1696d60da22194766c1d0296cfc0be193be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/marc-mabe/php-enum-phpstan/zipball/5872b1696d60da22194766c1d0296cfc0be193be",
+                "reference": "5872b1696d60da22194766c1d0296cfc0be193be",
+                "shasum": ""
+            },
+            "require": {
+                "marc-mabe/php-enum": "^1.1 || ^2.0 || ^3.0 || ^4.0",
+                "php": "~7.1",
+                "phpstan/phpstan": "^0.12"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5.20"
+            },
+            "type": "phpstan-extension",
+            "extra": {
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MabeEnumPHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Enum class reflection extension for PHPStan",
+            "keywords": [
+                "PHPStan",
+                "enum"
+            ],
+            "time": "2020-04-21T07:57:40+00:00"
+        },
+        {
             "name": "myclabs/deep-copy",
             "version": "1.10.1",
             "source": {
@@ -3084,6 +3198,51 @@
                 "prophecy"
             ],
             "time": "2020-07-09T08:33:42+00:00"
+        },
+        {
+            "name": "phpstan/extension-installer",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/extension-installer.git",
+                "reference": "2e041def501d661b806f50000c8a4dccbd4907b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/2e041def501d661b806f50000c8a4dccbd4907b4",
+                "reference": "2e041def501d661b806f50000c8a4dccbd4907b4",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1 || ^2.0",
+                "php": "^7.1",
+                "phpstan/phpstan": ">=0.11.6"
+            },
+            "require-dev": {
+                "composer/composer": "^1.8",
+                "consistence/coding-standard": "^3.8",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+                "ergebnis/composer-normalize": "^2.0.2",
+                "jakub-onderka/php-parallel-lint": "^1.0",
+                "phing/phing": "^2.16",
+                "phpstan/phpstan-strict-rules": "^0.11",
+                "slevomat/coding-standard": "^5.0.4"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PHPStan\\ExtensionInstaller\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\ExtensionInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer plugin for automatic installation of PHPStan extensions",
+            "time": "2020-03-31T16:00:42+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
