@@ -1,9 +1,9 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class Meta
@@ -11,7 +11,7 @@ use Upstain\AmadeusApiClient\Model\ResponseModelBase;
  * @method int getCount()
  * @method mixed getLinks()
  */
-class Meta extends ResponseModelBase
+class Meta extends FromArrayModelBase
 {
     /**
      * @var int

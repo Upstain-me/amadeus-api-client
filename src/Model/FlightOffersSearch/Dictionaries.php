@@ -4,7 +4,7 @@ namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
 use Plumbok\Annotation\Getter;
 use Plumbok\Annotation\Setter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class Dictionaries
@@ -18,7 +18,7 @@ use Upstain\AmadeusApiClient\Model\ResponseModelBase;
  * @method array getCarriers()
  * @method void setCarriers(array $carriers)
  */
-class Dictionaries extends ResponseModelBase
+class Dictionaries extends FromArrayModelBase
 {
     /**
      * @var array

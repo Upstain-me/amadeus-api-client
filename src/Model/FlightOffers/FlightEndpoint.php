@@ -1,9 +1,9 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class FlightEndpoint
@@ -12,7 +12,7 @@ use Upstain\AmadeusApiClient\Model\ResponseModelBase;
  * @method string getTerminal()
  * @method string getAt()
  */
-class FlightEndpoint extends ResponseModelBase
+class FlightEndpoint extends FromArrayModelBase
 {
     /**
      * @var string

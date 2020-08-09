@@ -1,16 +1,16 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class PricingOptions
  *
  * @method string[] getFareType()
  */
-class PricingOptions extends ResponseModelBase
+class PricingOptions extends FromArrayModelBase
 {
     /**
      * @var string[]

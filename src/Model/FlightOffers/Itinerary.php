@@ -1,17 +1,17 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class Itinerary
  *
  * @method string getDuration()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Segment[] getSegments()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Segment[] getSegments()
  */
-class Itinerary extends ResponseModelBase
+class Itinerary extends FromArrayModelBase
 {
     /**
      * @var string

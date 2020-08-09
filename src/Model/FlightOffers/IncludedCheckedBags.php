@@ -1,16 +1,16 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class IncludedCheckedBags
  *
  * @method int getQuantity()
  */
-class IncludedCheckedBags extends ResponseModelBase
+class IncludedCheckedBags extends FromArrayModelBase
 {
     /**
      * @var int

@@ -1,9 +1,9 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class FlightOffer
@@ -16,13 +16,13 @@ use Upstain\AmadeusApiClient\Model\ResponseModelBase;
  * @method bool isOneWay()
  * @method string getLastTicketingDate()
  * @method int getNumberOfBookableSeats()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Itinerary[] getItineraries()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Price getPrice()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\PricingOptions getPricingOptions()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Itinerary[] getItineraries()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Price getPrice()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\PricingOptions getPricingOptions()
  * @method string[] getValidatingAirlineCodes()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\TravelerPricing[] getTravelerPricings()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\TravelerPricing[] getTravelerPricings()
  */
-class FlightOffer extends ResponseModelBase
+class FlightOffer extends FromArrayModelBase
 {
     /**
      * @var string

@@ -1,24 +1,24 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class Segment
  *
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightEndpoint getDeparture()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightEndpoint getArrival()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightEndpoint getDeparture()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightEndpoint getArrival()
  * @method string getCarrierCode()
  * @method string getNumber()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Aircraft getAircraft()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Aircraft getAircraft()
  * @method string getDuration()
  * @method string getId()
  * @method int getNumberOfStops()
  * @method bool isBlackListedInEu()
  */
-class Segment extends ResponseModelBase
+class Segment extends FromArrayModelBase
 {
     /**
      * @var FlightEndpoint

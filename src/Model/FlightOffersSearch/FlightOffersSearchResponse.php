@@ -4,6 +4,8 @@ namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
 use Plumbok\Annotation\Getter;
 use Plumbok\Annotation\Setter;
+use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
+use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
 
 /**
  * Class FlightOffersSearchResponse
@@ -11,8 +13,7 @@ use Plumbok\Annotation\Setter;
  * @method array getRawResponse()
  * @method void setRawResponse(array $rawResponse)
  * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Meta getMeta()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffer[] getData()
- * @method void setData(\Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffer[] $data)
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer[] getData()
  * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Dictionaries getDictionaries()
  */
 class FlightOffersSearchResponse
@@ -31,7 +32,7 @@ class FlightOffersSearchResponse
     private Meta $meta;
 
     /**
-     * @var FlightOffer[]
+     * @var \Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer[]
      * @Getter
      */
     private array $data;

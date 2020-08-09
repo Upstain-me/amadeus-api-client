@@ -1,9 +1,9 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
  * Class FareDetail
@@ -13,9 +13,9 @@ use Upstain\AmadeusApiClient\Model\ResponseModelBase;
  * @method string getFareBasis()
  * @method string getBrandedFare()
  * @method string getClass()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\IncludedCheckedBags getIncludedCheckedBags()
+ * @method \Upstain\AmadeusApiClient\Model\FlightOffers\IncludedCheckedBags getIncludedCheckedBags()
  */
-class FareDetail extends ResponseModelBase
+class FareDetail extends FromArrayModelBase
 {
     /**
      * @var string

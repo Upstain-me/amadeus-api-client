@@ -2,7 +2,7 @@
 
 namespace Upstain\AmadeusApiClient\Model;
 
-class ResponseModelBase
+class FromArrayModelBase
 {
     /**
      * @param mixed $data

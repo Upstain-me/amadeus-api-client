@@ -1,17 +1,17 @@
 <?php
 
-namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
+namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
 use Plumbok\Annotation\Getter;
-use Upstain\AmadeusApiClient\Model\ResponseModelBase;
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
 /**
- * Class Fee
+ * Class AdditionalService
  *
  * @method string getAmount()
  * @method string getType()
  */
-class Fee extends ResponseModelBase
+class AdditionalService extends FromArrayModelBase
 {
     /**
      * @var string
