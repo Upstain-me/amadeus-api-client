@@ -43,7 +43,7 @@ class FlightOffersPricing extends RequestBase
 
         $response = $this->httpClient->request(
             'POST',
-            'https://test.api.amadeus.com/v1/shopping/flight-offers/pricing',
+            $this->client->getConfiguration()->getBaseUrl() . '/v1/shopping/flight-offers/pricing',
             [
                 'body' => \json_encode($request->toArray(), JSON_THROW_ON_ERROR),
             ],
