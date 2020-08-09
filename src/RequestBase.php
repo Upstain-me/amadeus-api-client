@@ -4,11 +4,13 @@ namespace Upstain\AmadeusApiClient;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Upstain\AmadeusApiClient\Exception\AmadeusException;
 use Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffersSearchRequest;
 
@@ -20,11 +22,22 @@ abstract class RequestBase
     protected AuthenticatedClient $client;
 
     /**
+     * @var HttpClientInterface
+     */
+    protected HttpClientInterface $httpClient;
+
+    /**
      * @param AuthenticatedClient $client
      */
     public function __construct(AuthenticatedClient $client)
     {
         $this->client = $client;
+        $this->httpClient = HttpClient::create([
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => $this->client->getTokenType() . ' ' . $this->client->getAccessToken(),
+            ],
+        ]);
     }
 
     /**
@@ -55,7 +68,7 @@ abstract class RequestBase
      * @param string $cacheKey
      * @param \DateInterval $dateInterval
      * @param CacheConfigInterface|null $cacheConfig
-     * @return array|mixed
+     * @return array|null
      * @throws AmadeusException
      */
     protected function getRawResponse(
@@ -63,7 +76,8 @@ abstract class RequestBase
         string $cacheKey,
         \DateInterval $dateInterval,
         ?CacheConfigInterface $cacheConfig = null
-    ) {
+    ): ?array {
+        $rawResponse = null;
         if ($cacheConfig) {
             try {
                 $rawResponse = $cacheConfig->getCache()->get(
@@ -71,7 +85,7 @@ abstract class RequestBase
                         $cacheKey,
                         $cacheConfig->getCacheKeyGenerator()->generate()
                     ]),
-                    fn (CacheItemInterface $item): array => $this->cacheCallback(
+                    fn (CacheItemInterface $item): ?array => $this->cacheCallback(
                         $item,
                         $request,
                         $dateInterval
@@ -91,14 +105,14 @@ abstract class RequestBase
      * @param CacheItemInterface $item
      * @param FlightOffersSearchRequest $flightOffersSearchRequest
      * @param \DateInterval $dateInterval
-     * @return array<string, mixed>
+     * @return array<string, mixed>|null
      * @throws AmadeusException
      */
     protected function cacheCallback(
         CacheItemInterface $item,
         FlightOffersSearchRequest $flightOffersSearchRequest,
         \DateInterval $dateInterval
-    ): array {
+    ): ?array {
         $token = $this->request($flightOffersSearchRequest);
         $item->expiresAfter($dateInterval);
 
@@ -107,11 +121,12 @@ abstract class RequestBase
 
     /**
      * @param mixed $request
-     * @return array<string, mixed>|mixed
+     * @return array<string, mixed>|null
      * @throws AmadeusException
      */
-    protected function request($request): array
+    protected function request($request): ?array
     {
+        $response = null;
         try {
             $response = $this->doRequest($request);
         } catch (ClientExceptionInterface |

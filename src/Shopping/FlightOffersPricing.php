@@ -5,26 +5,26 @@ namespace Upstain\AmadeusApiClient\Shopping;
 use Upstain\AmadeusApiClient\CacheConfigInterface;
 use Upstain\AmadeusApiClient\Constants\CacheConstant;
 use Upstain\AmadeusApiClient\Exception\AmadeusException;
-use Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffersSearchRequest;
-use Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffersSearchResponse;
+use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingRequest;
+use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingResponse;
 use Upstain\AmadeusApiClient\RequestBase;
 
-class FlightOffersSearch extends RequestBase
+class FlightOffersPricing extends RequestBase
 {
     /**
-     * @param FlightOffersSearchRequest $flightOffersSearchRequest
+     * @param FlightOffersPricingRequest $flightOffersPricingRequest
      * @param CacheConfigInterface|null $cacheConfig
-     * @return FlightOffersSearchResponse
+     * @return FlightOffersPricingResponse
      * @throws AmadeusException
      */
-    public function get(
-        FlightOffersSearchRequest $flightOffersSearchRequest,
+    public function post(
+        FlightOffersPricingRequest $flightOffersPricingRequest,
         ?CacheConfigInterface $cacheConfig = null
-    ): FlightOffersSearchResponse {
-        $response = new FlightOffersSearchResponse();
+    ): FlightOffersPricingResponse {
+        $response = new FlightOffersPricingResponse();
         $response->setRawResponse($this->getRawResponse(
-            $flightOffersSearchRequest,
-            CacheConstant::AMADEUS_FLIGHT_OFFERS_SEARCH_CACHE,
+            $flightOffersPricingRequest,
+            CacheConstant::AMADEUS_FLIGHT_OFFERS_PRICING_CACHE,
             new \DateInterval('PT12H'),
             $cacheConfig
         ));
@@ -37,15 +37,15 @@ class FlightOffersSearch extends RequestBase
      */
     protected function doRequest($request): array
     {
-        if (!$request instanceof FlightOffersSearchRequest) {
+        if (!$request instanceof FlightOffersPricingRequest) {
             return [];
         }
 
         $response = $this->httpClient->request(
-            'GET',
-            $this->client->getConfiguration()->getBaseUrl() . '/v2/shopping/flight-offers',
+            'POST',
+            'https://test.api.amadeus.com/v1/shopping/flight-offers/pricing',
             [
-                'query' => $request->toArray(),
+                'body' => \json_encode($request->toArray(), JSON_THROW_ON_ERROR),
             ],
         );
 
@@ -57,7 +57,7 @@ class FlightOffersSearch extends RequestBase
      */
     protected function throwCacheError(\Throwable $e): void
     {
-        throw AmadeusException::flightOffersSearchCacheError($e);
+        throw AmadeusException::flightOffersPricingCacheError($e);
     }
 
     /**
@@ -65,6 +65,6 @@ class FlightOffersSearch extends RequestBase
      */
     protected function throwException(\Throwable $e): void
     {
-        throw AmadeusException::flightOffersSearchError($e);
+        throw AmadeusException::flightOffersPricingError($e);
     }
 }

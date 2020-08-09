@@ -54,16 +54,21 @@ class AmadeusTest extends Unit
     }
 
     /**
+     * @depends testAuthenticate
      */
-    public function testFlightOffersPricing()
+    public function testFlightOffersPricing(AuthenticatedClient $authenticatedClient)
     {
         $request = new FlightOffersPricingRequest();
 
         $body = $this->getJson('flightOffersPricing/request.json');
         $fromArray = $request->fromArray($body);
 
+        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray);
+
         self::assertEquals('flight-offers-pricing', $fromArray->getData()->getType());
         self::assertEquals('flight-offer', $fromArray->getData()->getFlightOffers()[0]->getType());
+
+        self::assertEquals('flight-offers-pricing', $response->getRawResponse()['data']['type']);
     }
 
     /**

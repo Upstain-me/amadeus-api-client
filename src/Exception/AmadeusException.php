@@ -65,4 +65,17 @@ final class AmadeusException extends \Exception
 
         return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_SEARCH, $message, $e->getCode());
     }
+
+    public static function flightOffersPricingError(\Throwable $e): AmadeusException
+    {
+        $message = 'Flight Offers Search error: ' . $e->getMessage();
+        return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_PRICING, $message, $e->getCode(), $e);
+    }
+
+    public static function flightOffersPricingCacheError(\Throwable $e): AmadeusException
+    {
+        $message = 'Flight Offers Search cache error: ' . $e->getMessage();
+
+        return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_PRICING, $message, $e->getCode());
+    }
 }

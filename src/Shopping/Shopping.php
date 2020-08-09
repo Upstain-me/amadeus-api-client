@@ -26,4 +26,12 @@ class Shopping
     {
         return new FlightOffersSearch($this->client);
     }
+
+    /**
+     * @return FlightOffersPricing
+     */
+    public function flightOfferPricing(): FlightOffersPricing
+    {
+        return new FlightOffersPricing($this->client);
+    }
 }

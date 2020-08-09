@@ -3,31 +3,20 @@
 namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
 use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\Setter;
 use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
 use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
+use Upstain\AmadeusApiClient\Model\ResponseBase;
 
 /**
  * Class FlightOffersSearchResponse
  *
- * @method array getRawResponse()
- * @method void setRawResponse(array $rawResponse)
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Meta getMeta()
  * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer[] getData()
  * @method \Upstain\AmadeusApiClient\Model\FlightOffersSearch\Dictionaries getDictionaries()
  */
-class FlightOffersSearchResponse
+class FlightOffersSearchResponse extends ResponseBase
 {
     /**
-     * @var array<mixed>
-     * @Getter
-     * @Setter
-     */
-    private array $rawResponse;
-
-    /**
      * @var Meta
-     * @Getter
      */
     private Meta $meta;
 
@@ -48,15 +37,29 @@ class FlightOffersSearchResponse
      */
     public function transformRawResponse(): FlightOffersSearchResponse
     {
-        $this->meta = new Meta($this->rawResponse['meta']);
-        $this->dictionaries = new Dictionaries($this->rawResponse['dictionaries']);
+        if (isset($this->rawResponse['meta'])) {
+            $this->meta = new Meta($this->rawResponse['meta']);
+        }
+        if (isset($this->rawResponse['dictionaries'])) {
+            $this->dictionaries = new Dictionaries($this->rawResponse['dictionaries']);
+        }
 
-        foreach ($this->rawResponse['data'] as $flightOffer) {
-            $offer = new FlightOffer($flightOffer);
+        if (isset($this->rawResponse['data'])) {
+            foreach ($this->rawResponse['data'] as $flightOffer) {
+                $offer = new FlightOffer($flightOffer);
 
-            $this->data[] = $offer;
+                $this->data[] = $offer;
+            }
         }
 
         return $this;
+    }
+
+    /**
+     * @return Meta
+     */
+    public function getMeta(): Meta
+    {
+        return $this->meta;
     }
 }
