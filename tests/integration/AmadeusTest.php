@@ -63,12 +63,35 @@ class AmadeusTest extends Unit
         $body = $this->getJson('flightOffersPricing/request.json');
         $fromArray = $request->fromArray($body);
 
-        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray);
+        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray, $this->getCacheConfigPricing());
 
         self::assertEquals('flight-offers-pricing', $fromArray->getData()->getType());
         self::assertEquals('flight-offer', $fromArray->getData()->getFlightOffers()[0]->getType());
 
         self::assertEquals('flight-offers-pricing', $response->getRawResponse()['data']['type']);
+
+        self::assertEquals('PricingOrFareBasisDiscrepancyWarning', $response->transformRawResponse()->getWarnings()[0]->getTitle());
+    }
+
+    /**
+     * @return \Prophecy\Prophecy\ObjectProphecy|CacheConfigInterface
+     * @throws \JsonException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    private function getCacheConfigPricing()
+    {
+        $response = $this->getJson('flightOffersPricing/response.json');
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any(), Argument::any())->willReturn($response);
+
+        $cacheKeyGenerator = $this->prophesize(CacheKeyGeneratorInterface::class);
+        $cacheKeyGenerator->generate()->willReturn('test');
+
+        $cacheConfig = $this->prophesize(CacheConfigInterface::class);
+        $cacheConfig->getCacheKeyGenerator()->willReturn($cacheKeyGenerator->reveal());
+        $cacheConfig->getCache()->willReturn($cache->reveal());
+
+        return $cacheConfig->reveal();
     }
 
     /**

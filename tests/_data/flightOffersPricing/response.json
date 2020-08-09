@@ -1,0 +1,198 @@
+{
+  "warnings": [
+    {
+      "code": 0,
+      "title": "PricingOrFareBasisDiscrepancyWarning",
+      "detail": "Actual price and/or fare basis for some passengers is different from requested ones",
+      "status": 200
+    }
+  ],
+  "data": {
+    "type": "flight-offers-pricing",
+    "flightOffers": [
+      {
+        "type": "flight-offer",
+        "id": "1",
+        "source": "GDS",
+        "instantTicketingRequired": false,
+        "nonHomogeneous": false,
+        "paymentCardRequired": false,
+        "lastTicketingDate": "2020-08-10",
+        "itineraries": [
+          {
+            "segments": [
+              {
+                "departure": {
+                  "iataCode": "FRA",
+                  "terminal": "1",
+                  "at": "2021-02-01T17:50:00"
+                },
+                "arrival": {
+                  "iataCode": "LIS",
+                  "terminal": "1",
+                  "at": "2021-02-01T19:55:00"
+                },
+                "carrierCode": "TP",
+                "number": "579",
+                "aircraft": {
+                  "code": "320"
+                },
+                "operating": {
+                  "carrierCode": "TP"
+                },
+                "duration": "PT3H5M",
+                "id": "249",
+                "numberOfStops": 0,
+                "co2Emissions": [
+                  {
+                    "weight": 165,
+                    "weightUnit": "KG",
+                    "cabin": "ECONOMY"
+                  }
+                ]
+              },
+              {
+                "departure": {
+                  "iataCode": "LIS",
+                  "terminal": "1",
+                  "at": "2021-02-01T23:30:00"
+                },
+                "arrival": {
+                  "iataCode": "GIG",
+                  "terminal": "2",
+                  "at": "2021-02-02T06:30:00"
+                },
+                "carrierCode": "TP",
+                "number": "75",
+                "aircraft": {
+                  "code": "339"
+                },
+                "operating": {
+                  "carrierCode": "TP"
+                },
+                "duration": "PT10H",
+                "id": "250",
+                "numberOfStops": 0,
+                "co2Emissions": [
+                  {
+                    "weight": 384,
+                    "weightUnit": "KG",
+                    "cabin": "ECONOMY"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "price": {
+          "currency": "EUR",
+          "total": "355.23",
+          "base": "106.00",
+          "fees": [
+            {
+              "amount": "0.00",
+              "type": "SUPPLIER"
+            },
+            {
+              "amount": "0.00",
+              "type": "TICKETING"
+            },
+            {
+              "amount": "0.00",
+              "type": "FORM_OF_PAYMENT"
+            }
+          ],
+          "grandTotal": "355.23",
+          "billingCurrency": "EUR"
+        },
+        "pricingOptions": {
+          "fareType": [
+            "PUBLISHED"
+          ],
+          "includedCheckedBagsOnly": false
+        },
+        "validatingAirlineCodes": [
+          "TP"
+        ],
+        "travelerPricings": [
+          {
+            "travelerId": "1",
+            "fareOption": "STANDARD",
+            "travelerType": "ADULT",
+            "price": {
+              "currency": "EUR",
+              "total": "355.23",
+              "base": "106.00",
+              "taxes": [
+                {
+                  "amount": "9.95",
+                  "code": "DE"
+                },
+                {
+                  "amount": "58.82",
+                  "code": "OY"
+                },
+                {
+                  "amount": "8.15",
+                  "code": "PT"
+                },
+                {
+                  "amount": "26.59",
+                  "code": "RA"
+                },
+                {
+                  "amount": "15.72",
+                  "code": "YP"
+                },
+                {
+                  "amount": "130.00",
+                  "code": "YQ"
+                }
+              ],
+              "refundableTaxes": "119.23"
+            },
+            "fareDetailsBySegment": [
+              {
+                "segmentId": "249",
+                "cabin": "ECONOMY",
+                "fareBasis": "TDEDSI0B",
+                "brandedFare": "DISCOUNT",
+                "class": "T",
+                "includedCheckedBags": {
+                  "quantity": 0
+                }
+              },
+              {
+                "segmentId": "250",
+                "cabin": "ECONOMY",
+                "fareBasis": "TDEDSI0B",
+                "brandedFare": "DISCOUNT",
+                "class": "T",
+                "includedCheckedBags": {
+                  "quantity": 0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "bookingRequirements": {}
+  },
+  "dictionaries": {
+    "locations": {
+      "FRA": {
+        "cityCode": "FRA",
+        "countryCode": "DE"
+      },
+      "GIG": {
+        "cityCode": "RIO",
+        "countryCode": "BR"
+      },
+      "LIS": {
+        "cityCode": "LIS",
+        "countryCode": "PT"
+      }
+    }
+  }
+}
