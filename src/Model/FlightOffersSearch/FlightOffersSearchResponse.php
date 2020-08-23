@@ -8,7 +8,6 @@ use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
 use Upstain\AmadeusApiClient\Model\ResponseBase;
 
 /**
- * @template T of FlightOffer
  * @package Upstain\AmadeusApiClient\Model\FlightOffersSearch
  */
 class FlightOffersSearchResponse extends ResponseBase
@@ -24,7 +23,7 @@ class FlightOffersSearchResponse extends ResponseBase
     protected array $data;
 
     /**
-     * @var FlightOffersSearchResponseDecoratorInterface<T>|null
+     * @var FlightOffersSearchResponseDecoratorInterface|null
      */
     protected ?FlightOffersSearchResponseDecoratorInterface $decorator = null;
 
@@ -43,7 +42,7 @@ class FlightOffersSearchResponse extends ResponseBase
             foreach ($this->rawResponse['data'] as $flightOffer) {
                 $offer = new FlightOffer($flightOffer);
 
-                if ($this->decorator) {
+                if ($this->decorator !== null) {
                     $offer = $this->decorator->decorate($flightOffer);
                 }
                 $this->data[] = $offer;
@@ -70,7 +69,7 @@ class FlightOffersSearchResponse extends ResponseBase
     }
 
     /**
-     * @param FlightOffersSearchResponseDecoratorInterface<T>|null $decorator
+     * @param FlightOffersSearchResponseDecoratorInterface|null $decorator
      * @return $this
      */
     public function setDecorator(?FlightOffersSearchResponseDecoratorInterface $decorator): FlightOffersSearchResponse

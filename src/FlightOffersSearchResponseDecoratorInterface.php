@@ -6,14 +6,12 @@ use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
 
 /**
  * @package Upstain\AmadeusApiClient
- *
- * @template T of FlightOffer
  */
 interface FlightOffersSearchResponseDecoratorInterface
 {
     /**
      * @param FlightOffer $flightOffer
-     * @return T
+     * @return FlightOffer
      */
-    public function decorate(FlightOffer $flightOffer);
+    public function decorate(FlightOffer $flightOffer): FlightOffer;
 }
