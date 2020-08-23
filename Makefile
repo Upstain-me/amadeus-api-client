@@ -59,7 +59,7 @@ composer-install:
 
 quality:
 	docker-compose exec -T php vendor/bin/codecept run unit ;\
-	docker-compose exec -T php vendor/bin/phpstan analyse src --level 8 ;\
+	docker-compose exec -T php vendor/bin/phpstan analyse ;\
 	docker-compose exec -T php vendor/bin/ecs check --fix ;\
 
 install-git-hook:
@@ -67,3 +67,9 @@ install-git-hook:
 
 list:
 	docker-compose ps
+
+type:
+	docker-compose exec -T php vendor/bin/phpstan analyse ;\
+
+test-integration:
+	docker-compose exec -T php vendor/bin/codecept run integration ;\

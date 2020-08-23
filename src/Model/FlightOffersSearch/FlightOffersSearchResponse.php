@@ -2,10 +2,14 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
+use Upstain\AmadeusApiClient\FlightOffersSearchResponseDecoratorInterface;
 use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
 use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
 use Upstain\AmadeusApiClient\Model\ResponseBase;
 
+/**
+ * @package Upstain\AmadeusApiClient\Model\FlightOffersSearch
+ */
 class FlightOffersSearchResponse extends ResponseBase
 {
     /**
@@ -17,6 +21,11 @@ class FlightOffersSearchResponse extends ResponseBase
      * @var FlightOffer[]
      */
     protected array $data;
+
+    /**
+     * @var FlightOffersSearchResponseDecoratorInterface|null
+     */
+    protected ?FlightOffersSearchResponseDecoratorInterface $decorator = null;
 
     /**
      * @return $this
@@ -33,6 +42,9 @@ class FlightOffersSearchResponse extends ResponseBase
             foreach ($this->rawResponse['data'] as $flightOffer) {
                 $offer = new FlightOffer($flightOffer);
 
+                if ($this->decorator !== null) {
+                    $offer = $this->decorator->decorate($flightOffer);
+                }
                 $this->data[] = $offer;
             }
         }
@@ -54,5 +66,15 @@ class FlightOffersSearchResponse extends ResponseBase
     public function getData(): array
     {
         return $this->data;
+    }
+
+    /**
+     * @param FlightOffersSearchResponseDecoratorInterface|null $decorator
+     * @return $this
+     */
+    public function setDecorator(?FlightOffersSearchResponseDecoratorInterface $decorator): FlightOffersSearchResponse
+    {
+        $this->decorator = $decorator;
+        return $this;
     }
 }
