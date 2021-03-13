@@ -2,112 +2,79 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class FlightOffer
- *
- * @method string getType()
- * @method string getId()
- * @method string getSource()
- * @method bool isInstantTicketingRequired()
- * @method bool isNonHomogeneous()
- * @method bool isOneWay()
- * @method string getLastTicketingDate()
- * @method int getNumberOfBookableSeats()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Itinerary[] getItineraries()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Price getPrice()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\PricingOptions getPricingOptions()
- * @method string[] getValidatingAirlineCodes()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\TravelerPricing[] getTravelerPricings()
- * @method bool isPaymentCardRequired()
- */
 class FlightOffer extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $type;
+    protected $type;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $id;
+    protected $id;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $source;
+    protected $source;
 
     /**
      * @var bool
-     * @Getter
      */
-    protected bool $instantTicketingRequired;
+    protected $instantTicketingRequired;
 
     /**
      * @var bool
-     * @Getter
      */
-    protected bool $nonHomogeneous;
+    protected $nonHomogeneous;
 
     /**
      * @var bool
-     * @Getter
      */
-    protected bool $oneWay;
+    protected $oneWay;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $lastTicketingDate;
+    protected $lastTicketingDate;
 
     /**
      * @var int
-     * @Getter
      */
-    protected int $numberOfBookableSeats;
+    protected $numberOfBookableSeats;
 
     /**
      * @var Itinerary[]
-     * @Getter
      */
-    protected array $itineraries;
+    protected $itineraries;
 
     /**
      * @var Price
-     * @Getter
      */
-    protected Price $price;
+    protected $price;
 
     /**
      * @var PricingOptions
-     * @Getter
      */
-    protected PricingOptions $pricingOptions;
+    protected $pricingOptions;
 
     /**
      * @var string[]
-     * @Getter
      */
-    protected array $validatingAirlineCodes;
+    protected $validatingAirlineCodes;
 
     /**
      * @var TravelerPricing[]
-     * @Getter
      */
-    protected array $travelerPricings;
+    protected $travelerPricings;
 
     /**
      * @var bool
-     * @Getter
      */
-    protected bool $paymentCardRequired;
+    protected $paymentCardRequired;
 
     /**
      * @param mixed $data
@@ -141,5 +108,117 @@ class FlightOffer extends FromArrayModelBase
                 $this->travelerPricings[] = new TravelerPricing($travelerPricing);
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isInstantTicketingRequired()
+    {
+        return $this->instantTicketingRequired;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNonHomogeneous()
+    {
+        return $this->nonHomogeneous;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOneWay()
+    {
+        return $this->oneWay;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastTicketingDate()
+    {
+        return $this->lastTicketingDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfBookableSeats()
+    {
+        return $this->numberOfBookableSeats;
+    }
+
+    /**
+     * @return Itinerary[]
+     */
+    public function getItineraries()
+    {
+        return $this->itineraries;
+    }
+
+    /**
+     * @return Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return PricingOptions
+     */
+    public function getPricingOptions()
+    {
+        return $this->pricingOptions;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getValidatingAirlineCodes()
+    {
+        return $this->validatingAirlineCodes;
+    }
+
+    /**
+     * @return TravelerPricing[]
+     */
+    public function getTravelerPricings()
+    {
+        return $this->travelerPricings;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPaymentCardRequired()
+    {
+        return $this->paymentCardRequired;
     }
 }

@@ -2,33 +2,46 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Co2Emission
- *
- * @method int getWeight()
- * @method string getWeightUnit()
- * @method string getCabin()
- */
 class Co2Emission extends FromArrayModelBase
 {
     /**
      * @var int
-     * @Getter
      */
-    protected int $weight;
+    protected $weight;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $weightUnit;
+    protected $weightUnit;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $cabin;
+    protected $cabin;
+
+    /**
+     * @return int
+     */
+    public function getWeight()
+    {
+        return $this->weight;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWeightUnit()
+    {
+        return $this->weightUnit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCabin()
+    {
+        return $this->cabin;
+    }
 }

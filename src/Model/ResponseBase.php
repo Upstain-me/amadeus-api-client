@@ -2,46 +2,50 @@
 
 namespace Upstain\AmadeusApiClient\Model;
 
-use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\Setter;
 use Upstain\AmadeusApiClient\Model\FlightOffers\Dictionaries;
 
-/**
- * Class ResponseBase
- *
- * @method array|null getRawResponse()
- * @method void setRawResponse(array|null $rawResponse)
- */
 abstract class ResponseBase
 {
     /**
-     * @var array<mixed>|null
-     * @Getter
-     * @Setter
+     * @var array<string, mixed>
      */
-    protected ?array $rawResponse;
+    protected array $rawResponse;
 
     /**
-     * @var Dictionaries
+     * @var Dictionaries|null
      */
-    protected Dictionaries $dictionaries;
+    protected ?Dictionaries $dictionaries = null;
 
     /**
-     * @return ResponseBase
+     * @param array<string, mixed> $rawResponse
      */
-    public function transformRawResponse(): ResponseBase
+    public function __construct(array $rawResponse)
     {
-        if (isset($this->rawResponse['dictionaries'])) {
-            $this->dictionaries = new Dictionaries($this->rawResponse['dictionaries']);
-        }
-
-        return $this;
+        $this->rawResponse = $rawResponse;
     }
 
     /**
-     * @return Dictionaries
+     * @param array<string, mixed> $rawResponse
      */
-    public function getDictionaries(): Dictionaries
+    protected function transformDictionaries(array $rawResponse): void
+    {
+        if (isset($rawResponse['dictionaries'])) {
+            $this->dictionaries = new Dictionaries($rawResponse['dictionaries']);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawResponse(): array
+    {
+        return $this->rawResponse;
+    }
+
+    /**
+     * @return Dictionaries|null
+     */
+    public function getDictionaries(): ?Dictionaries
     {
         return $this->dictionaries;
     }

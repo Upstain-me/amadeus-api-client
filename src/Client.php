@@ -12,6 +12,7 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Upstain\AmadeusApiClient\Exception\AmadeusException;
 use Upstain\AmadeusApiClient\Exception\ExceptionCode;
 
@@ -32,13 +33,20 @@ class Client implements LoggerAwareInterface
     private CacheInterface $cache;
 
     /**
+     * @var HttpClientInterface
+     */
+    private HttpClientInterface $httpClient;
+
+    /**
      * @param Configuration $configuration
      * @param CacheInterface $cache
+     * @param HttpClientInterface $httpClient
      */
-    public function __construct(Configuration $configuration, CacheInterface $cache)
+    public function __construct(Configuration $configuration, CacheInterface $cache, HttpClientInterface $httpClient)
     {
         $this->configuration = $configuration;
         $this->cache = $cache;
+        $this->httpClient = $httpClient;
     }
 
     /**
@@ -70,6 +78,7 @@ class Client implements LoggerAwareInterface
         return new AuthenticatedClient(
             $this->getConfiguration(),
             $this->cache,
+            $this->httpClient,
             $response['expires_in'],
             $response['token_type'],
             $response['access_token'],
@@ -92,13 +101,7 @@ class Client implements LoggerAwareInterface
     protected function auth(): array
     {
         try {
-            $client = HttpClient::create([
-                'headers' => [
-                    'Content-Type' => 'application/x-www-form-urlencoded',
-                ]
-            ]);
-
-            $response = $client->request(
+            $response = $this->httpClient->request(
                 'POST',
                 $this->getConfiguration()->getBaseUrl() . '/v1/security/oauth2/token',
                 [
@@ -106,6 +109,9 @@ class Client implements LoggerAwareInterface
                         'grant_type' => 'client_credentials',
                         'client_id' => $this->getConfiguration()->getClientId(),
                         'client_secret' => $this->getConfiguration()->getClientSecret(),
+                    ],
+                    'headers' => [
+                        'Content-Type' => 'application/x-www-form-urlencoded',
                     ],
                 ],
             );
@@ -126,5 +132,13 @@ class Client implements LoggerAwareInterface
 
             throw AmadeusException::authError($e);
         }
+    }
+
+    /**
+     * @return HttpClientInterface
+     */
+    public function getHttpClient(): HttpClientInterface
+    {
+        return $this->httpClient;
     }
 }

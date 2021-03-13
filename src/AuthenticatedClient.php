@@ -3,6 +3,7 @@
 namespace Upstain\AmadeusApiClient;
 
 use Psr\SimpleCache\CacheInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Upstain\AmadeusApiClient\Shopping\Shopping;
 
 final class AuthenticatedClient extends Client
@@ -25,6 +26,7 @@ final class AuthenticatedClient extends Client
     /**
      * @param Configuration $configuration
      * @param CacheInterface $cache
+     * @param HttpClientInterface $httpClient
      * @param string $expiresIn
      * @param string $tokenType
      * @param string $accessToken
@@ -32,11 +34,12 @@ final class AuthenticatedClient extends Client
     public function __construct(
         Configuration $configuration,
         CacheInterface $cache,
+        HttpClientInterface $httpClient,
         string $expiresIn,
         string $tokenType,
         string $accessToken
     ) {
-        parent::__construct($configuration, $cache);
+        parent::__construct($configuration, $cache, $httpClient);
         $this->expiresIn = $expiresIn;
         $this->tokenType = $tokenType;
         $this->accessToken = $accessToken;

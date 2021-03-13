@@ -2,84 +2,59 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Segment
- *
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightEndpoint getDeparture()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FlightEndpoint getArrival()
- * @method string getCarrierCode()
- * @method string getNumber()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Aircraft getAircraft()
- * @method string getDuration()
- * @method string getId()
- * @method int getNumberOfStops()
- * @method bool isBlackListedInEu()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Co2Emission[] getCo2Emissions()
- */
 class Segment extends FromArrayModelBase
 {
     /**
      * @var FlightEndpoint
-     * @Getter
      */
-    protected FlightEndpoint $departure;
+    protected $departure;
 
     /**
      * @var FlightEndpoint
-     * @Getter
      */
-    protected FlightEndpoint $arrival;
+    protected $arrival;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $carrierCode;
+    protected $carrierCode;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $number;
+    protected $number;
 
     /**
      * @var Aircraft
-     * @Getter
      */
-    protected Aircraft $aircraft;
+    protected $aircraft;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $duration;
+    protected $duration;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $id;
+    protected $id;
 
     /**
      * @var int
-     * @Getter
      */
-    protected int $numberOfStops;
+    protected $numberOfStops;
 
     /**
      * @var bool
-     * @Getter
      */
-    protected bool $blackListedInEu;
+    protected $blackListedInEu;
 
     /**
      * @var Co2Emission[]
-     * @Getter
      */
-    protected array $co2Emissions;
+    protected $co2Emissions;
 
     public function __construct($data)
     {
@@ -98,5 +73,85 @@ class Segment extends FromArrayModelBase
         if (isset($data['co2Emissions'])) {
             $this->co2Emissions[] = new Co2Emission($data['co2Emissions']);
         }
+    }
+
+    /**
+     * @return FlightEndpoint
+     */
+    public function getDeparture()
+    {
+        return $this->departure;
+    }
+
+    /**
+     * @return FlightEndpoint
+     */
+    public function getArrival()
+    {
+        return $this->arrival;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCarrierCode()
+    {
+        return $this->carrierCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @return Aircraft
+     */
+    public function getAircraft()
+    {
+        return $this->aircraft;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfStops()
+    {
+        return $this->numberOfStops;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBlackListedInEu()
+    {
+        return $this->blackListedInEu;
+    }
+
+    /**
+     * @return Co2Emission[]
+     */
+    public function getCo2Emissions()
+    {
+        return $this->co2Emissions;
     }
 }

@@ -2,15 +2,10 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
-use Upstain\AmadeusApiClient\CacheConfigInterface;
-use Upstain\AmadeusApiClient\FlightOffersSearchResponseDecoratorInterface;
 use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
 use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
 use Upstain\AmadeusApiClient\Model\ResponseBase;
 
-/**
- * @package Upstain\AmadeusApiClient\Model\FlightOffersSearch
- */
 class FlightOffersSearchResponse extends ResponseBase
 {
     /**
@@ -24,17 +19,15 @@ class FlightOffersSearchResponse extends ResponseBase
     protected array $data;
 
     /**
-     * @var FlightOffersSearchResponseDecoratorInterface|null
+     * @param array $rawResponse
+     * @param callable|null $responseDataAdapter
+     *
+     * @return self
      */
-    protected ?FlightOffersSearchResponseDecoratorInterface $decorator = null;
-
-    /**
-     * @return $this
-     */
-    public function transformRawResponse(): FlightOffersSearchResponse
+    public function transformRawResponse(array $rawResponse, ?callable $responseDataAdapter = null): self
     {
-        // TODO add caching here as well.
-        parent::transformRawResponse();
+        $this->rawResponse = $rawResponse;
+        $this->transformDictionaries($rawResponse);
 
         if (isset($this->rawResponse['meta'])) {
             $this->meta = new Meta($this->rawResponse['meta']);
@@ -44,8 +37,8 @@ class FlightOffersSearchResponse extends ResponseBase
             foreach ($this->rawResponse['data'] as $flightOffer) {
                 $offer = new FlightOffer($flightOffer);
 
-                if ($this->decorator !== null) {
-                    $offer = $this->decorator->decorate($flightOffer);
+                if ($responseDataAdapter !== null) {
+                    $offer = $responseDataAdapter($flightOffer);
                 }
                 $this->data[] = $offer;
             }
@@ -63,20 +56,10 @@ class FlightOffersSearchResponse extends ResponseBase
     }
 
     /**
-     * @return FlightOffer[]
+     * @return FlightOffer[]|mixed
      */
-    public function getData(): array
+    public function getData()
     {
         return $this->data;
-    }
-
-    /**
-     * @param FlightOffersSearchResponseDecoratorInterface|null $decorator
-     * @return $this
-     */
-    public function setDecorator(?FlightOffersSearchResponseDecoratorInterface $decorator): FlightOffersSearchResponse
-    {
-        $this->decorator = $decorator;
-        return $this;
     }
 }

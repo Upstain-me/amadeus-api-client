@@ -2,68 +2,49 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Price
- *
- * @method string getCurrency()
- * @method string getTotal()
- * @method string getBase()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Fee[] getFees()
- * @method string getGrandTotal()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\AdditionalService[] getAdditionalServices()
- * @method string getRefundableTaxes()
- */
 class Price extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $currency;
+    protected $currency;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $total;
+    protected $total;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $base;
+    protected $base;
 
     /**
      * @var Fee[]
-     * @Getter
      */
-    protected array $fees;
+    protected $fees;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $grandTotal;
+    protected $grandTotal;
 
     /**
      * @var AdditionalService[]
-     * @Getter
      */
-    protected array $additionalServices;
+    protected $additionalServices;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $refundableTaxes;
+    protected $refundableTaxes;
 
     /**
      * @var Tax[]
      */
-    protected array $taxes;
+    protected $taxes;
 
     public function __construct($data)
     {
@@ -91,5 +72,69 @@ class Price extends FromArrayModelBase
                 $this->taxes[] = new Tax($tax);
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBase()
+    {
+        return $this->base;
+    }
+
+    /**
+     * @return Fee[]
+     */
+    public function getFees()
+    {
+        return $this->fees;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGrandTotal()
+    {
+        return $this->grandTotal;
+    }
+
+    /**
+     * @return AdditionalService[]
+     */
+    public function getAdditionalServices()
+    {
+        return $this->additionalServices;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefundableTaxes()
+    {
+        return $this->refundableTaxes;
+    }
+
+    /**
+     * @return Tax[]
+     */
+    public function getTaxes()
+    {
+        return $this->taxes;
     }
 }

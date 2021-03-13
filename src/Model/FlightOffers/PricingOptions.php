@@ -2,25 +2,33 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class PricingOptions
- *
- * @method string[] getFareType()
- */
 class PricingOptions extends FromArrayModelBase
 {
     /**
      * @var string[]
-     * @Getter
      */
-    protected array $fareType;
+    protected $fareType;
 
     /**
      * @var bool
-     * Getter
      */
-    protected bool $includedCheckedBagsOnly;
+    protected $includedCheckedBagsOnly;
+
+    /**
+     * @return string[]
+     */
+    public function getFareType()
+    {
+        return $this->fareType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIncludedCheckedBagsOnly()
+    {
+        return $this->includedCheckedBagsOnly;
+    }
 }

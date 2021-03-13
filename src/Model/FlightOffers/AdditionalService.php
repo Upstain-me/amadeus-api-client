@@ -2,26 +2,33 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class AdditionalService
- *
- * @method string getAmount()
- * @method string getType()
- */
 class AdditionalService extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $amount;
+    protected $amount;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $type;
+    protected $type;
+
+    /**
+     * @return string
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }
