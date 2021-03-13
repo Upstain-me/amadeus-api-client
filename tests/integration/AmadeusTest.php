@@ -5,28 +5,40 @@ namespace Upstain\AmadeusApiClient\Tests\Integration;
 use Codeception\Test\Unit;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Contracts\Cache\CacheInterface;
-use Upstain\AmadeusApiClient\Amadeus;
+use Psr\SimpleCache\CacheInterface;
 use Upstain\AmadeusApiClient\AuthenticatedClient;
-use Upstain\AmadeusApiClient\CacheConfigInterface;
-use Upstain\AmadeusApiClient\CacheKeyGeneratorInterface;
+use Upstain\AmadeusApiClient\Client;
 use Upstain\AmadeusApiClient\Configuration;
 use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingRequest;
 use Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffersSearchRequest;
-use Upstain\AmadeusApiClient\PlumbokTrait;
 
 class AmadeusTest extends Unit
 {
-    use PlumbokTrait;
     use ProphecyTrait;
 
-    public function testAuthenticate()
+    /**
+     * @var Configuration
+     */
+    private $config;
+
+    public function _before(): void
     {
-        $config = new Configuration();
-        $config->setClientId($_ENV['AMADEUS_API_CLIENT_ID']);
-        $config->setClientSecret($_ENV['AMADEUS_API_CLIENT_SECRET']);
-        $amadeus = new Amadeus();
-        $authenticatedClient = $amadeus->configure($config)->authenticate();
+        $this->config = new Configuration(
+            'https://test.api.amadeus.com',
+            $_ENV['AMADEUS_API_CLIENT_ID'],
+            $_ENV['AMADEUS_API_CLIENT_SECRET'],
+        );
+    }
+
+    public function testAuthenticate(): AuthenticatedClient
+    {
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any())->willReturn(null);
+        $cache->set(Argument::any(), Argument::any())->willReturn(function () {
+            // no-op
+        });
+        $amadeus = new Client($this->config, $cache->reveal());
+        $authenticatedClient = $amadeus->authenticate();
 
         self::assertEquals('Bearer', $authenticatedClient->getTokenType());
 
@@ -95,33 +107,26 @@ class AmadeusTest extends Unit
     }
 
     /**
-     * @return \Prophecy\Prophecy\ObjectProphecy|CacheConfigInterface
+     * @return object|CacheInterface
      * @throws \JsonException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function getCacheConfig()
+    private function mockCache()
     {
         $response = $this->getJson('flightOffersSearch/response.json');
         $cache = $this->prophesize(CacheInterface::class);
-        $cache->get(Argument::any(), Argument::any())->willReturn($response);
+        $cache->get(Argument::any())->willReturn($response);
 
-        $cacheKeyGenerator = $this->prophesize(CacheKeyGeneratorInterface::class);
-        $cacheKeyGenerator->generate()->willReturn('test');
-
-        $cacheConfig = $this->prophesize(CacheConfigInterface::class);
-        $cacheConfig->getCacheKeyGenerator()->willReturn($cacheKeyGenerator->reveal());
-        $cacheConfig->getCache()->willReturn($cache->reveal());
-
-        return $cacheConfig->reveal();
+        return $cache->reveal();
     }
 
     /**
-     * @param $relativePath
+     * @param string $relativePath
      *   Relative path to the _data folder.
      * @return mixed
      * @throws \JsonException
      */
-    private function getJson($relativePath)
+    private function getJson(string $relativePath)
     {
         return \json_decode(
             \file_get_contents(__DIR__ . '/../_data/' . $relativePath),

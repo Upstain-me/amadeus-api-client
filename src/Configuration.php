@@ -6,39 +6,56 @@ use Plumbok\Annotation\Getter;
 use Plumbok\Annotation\Setter;
 use Plumbok\Annotation\ToString;
 
-/**
- * @ToString(property = "baseUrl")
- * @method string getBaseUrl()
- * @method void setBaseUrl(string $baseUrl)
- * @method string toString()
- * @method string getClientId()
- * @method void setClientId(string $clientId)
- * @method string getClientSecret()
- * @method void setClientSecret(string $clientSecret)
- */
 class Configuration
 {
     /**
      * @var string
-     *
-     * @Getter
-     * @Setter
      */
     private string $baseUrl = 'https://test.api.amadeus.com';
 
     /**
      * @var string
-     *
-     * @Getter
-     * @Setter
      */
     private string $clientId;
 
     /**
      * @var string
-     *
-     * @Getter
-     * @Setter
      */
     private string $clientSecret;
+
+    /**
+     * @param string $baseUrl
+     * @param string $clientId
+     * @param string $clientSecret
+     */
+    public function __construct(string $baseUrl, string $clientId, string $clientSecret)
+    {
+        $this->baseUrl = $baseUrl;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientSecret(): string
+    {
+        return $this->clientSecret;
+    }
 }

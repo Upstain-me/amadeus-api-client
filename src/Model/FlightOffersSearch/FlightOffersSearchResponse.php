@@ -2,6 +2,7 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
+use Upstain\AmadeusApiClient\CacheConfigInterface;
 use Upstain\AmadeusApiClient\FlightOffersSearchResponseDecoratorInterface;
 use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
 use Upstain\AmadeusApiClient\Model\FlightOffers\Meta;
@@ -32,6 +33,7 @@ class FlightOffersSearchResponse extends ResponseBase
      */
     public function transformRawResponse(): FlightOffersSearchResponse
     {
+        // TODO add caching here as well.
         parent::transformRawResponse();
 
         if (isset($this->rawResponse['meta'])) {

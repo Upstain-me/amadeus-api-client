@@ -2,64 +2,94 @@
 
 namespace Upstain\AmadeusApiClient;
 
-use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\Setter;
-use Psr\Cache\CacheItemInterface;
-use Psr\Cache\InvalidArgumentException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\SimpleCache\CacheInterface;
+use Psr\SimpleCache\InvalidArgumentException;
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Upstain\AmadeusApiClient\Constants\CacheConstant;
 use Upstain\AmadeusApiClient\Exception\AmadeusException;
+use Upstain\AmadeusApiClient\Exception\ExceptionCode;
 
-/**
- * Class Client
- *
- * @method \Upstain\AmadeusApiClient\Configuration getConfiguration()
- * @method void setConfiguration(\Upstain\AmadeusApiClient\Configuration $configuration)
- */
-class Client
+class Client implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
+    public const AMADEUS_AUTH_CACHE = 'amadeus_auth_cache';
+
     /**
      * @var Configuration
-     * @Getter
-     * @Setter
      */
     private Configuration $configuration;
 
-    public function authenticate(?CacheInterface $cache = null): AuthenticatedClient
+    /**
+     * @var CacheInterface
+     */
+    private CacheInterface $cache;
+
+    /**
+     * @param Configuration $configuration
+     * @param CacheInterface $cache
+     */
+    public function __construct(Configuration $configuration, CacheInterface $cache)
     {
-        if (!$cache) {
-            return $this->auth();
-        }
-
-        try {
-            return $cache->get(
-                CacheConstant::AMADEUS_AUTH_CACHE,
-                fn (CacheItemInterface $item): AuthenticatedClient => $this->cacheCallback($item)
-            );
-        } catch (InvalidArgumentException $e) {
-            throw AmadeusException::authCacheError($e);
-        }
-    }
-
-    private function cacheCallback(CacheItemInterface $item): AuthenticatedClient
-    {
-        $token = $this->auth();
-        $item->expiresAfter((int) $token->getExpiresIn());
-
-        return $token;
+        $this->configuration = $configuration;
+        $this->cache = $cache;
     }
 
     /**
      * @return AuthenticatedClient
+     *
      * @throws AmadeusException
      */
-    protected function auth(): AuthenticatedClient
+    public function authenticate(): AuthenticatedClient
+    {
+        $cacheKey = self::AMADEUS_AUTH_CACHE.'_'.$this->getConfiguration()->getClientId();
+        $response = null;
+
+        try {
+            $response = $this->cache->get($cacheKey);
+        } catch (InvalidArgumentException $e) {
+            $this->logger->error('Amadeus cache get error: ' . $e->getMessage());
+        }
+
+        if ($response === null) {
+            $response = $this->auth();
+
+            try {
+                $this->cache->set($cacheKey, $response);
+            } catch (InvalidArgumentException $e) {
+                $this->logger->error('Amadeus cache set error: ' . $e->getMessage());
+            }
+        }
+
+        return new AuthenticatedClient(
+            $this->getConfiguration(),
+            $this->cache,
+            $response['expires_in'],
+            $response['token_type'],
+            $response['access_token'],
+        );
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @return array<string, mixed>
+     *
+     * @throws AmadeusException
+     */
+    protected function auth(): array
     {
         try {
             $client = HttpClient::create([
@@ -79,20 +109,21 @@ class Client
                     ],
                 ],
             );
-            $content = $response->toArray();
 
-            $authClient = new AuthenticatedClient();
-            $authClient->setExpiresIn($content['expires_in']);
-            $authClient->setAccessToken($content['access_token']);
-            $authClient->setTokenType($content['token_type']);
-            $authClient->setConfiguration($this->getConfiguration());
-            return $authClient;
+            return $response->toArray();
         } catch (ClientExceptionInterface |
             DecodingExceptionInterface |
             RedirectionExceptionInterface |
             ServerExceptionInterface |
             TransportExceptionInterface $e
         ) {
+            $exceptionCode = (string) new ExceptionCode(ExceptionCode::AUTH, $e->getCode());
+            $context = [
+                'baseUrl' => $this->getConfiguration()->getBaseUrl(),
+                'client_id' => $this->getConfiguration()->getClientId()
+            ];
+            $this->logger->error($exceptionCode . ': ' . $e->getMessage(), $context);
+
             throw AmadeusException::authError($e);
         }
     }
