@@ -2,49 +2,59 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\Setter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Dictionaries
- *
- * @method array getLocations()
- * @method void setLocations(array $locations)
- * @method array getAircraft()
- * @method void setAircraft(array $aircraft)
- * @method array getCurrencies()
- * @method void setCurrencies(array $currencies)
- * @method array getCarriers()
- * @method void setCarriers(array $carriers)
- */
 class Dictionaries extends FromArrayModelBase
 {
     /**
-     * @var array
-     * @Getter
-     * @Setter
+     * @var array<string, array<string, string>>
      */
     protected $locations;
 
     /**
-     * @var array
-     * @Getter
-     * @Setter
+     * @var array<string, string>
      */
     protected $aircraft;
 
     /**
-     * @var array
-     * @Getter
-     * @Setter
+     * @var array<string, string>
      */
     protected $currencies;
 
     /**
-     * @var array
-     * @Getter
-     * @Setter
+     * @var array<string, string>
      */
     protected $carriers;
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    public function getLocations()
+    {
+        return $this->locations;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getAircraft()
+    {
+        return $this->aircraft;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getCurrencies()
+    {
+        return $this->currencies;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getCarriers()
+    {
+        return $this->carriers;
+    }
 }

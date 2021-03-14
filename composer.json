@@ -24,12 +24,12 @@
         }
     ],
     "require": {
-        "php": "^7.4",
+        "php": "^7.4 | ^8.0",
         "ext-json": "*",
-        "symfony/cache-contracts": "^2.0",
         "symfony/http-client": "^5.0",
-        "benelori/plumbok": "^0.10.5",
-        "marc-mabe/php-enum": "^4.3"
+        "marc-mabe/php-enum": "^4.3",
+        "psr/log": "^1.1",
+        "psr/simple-cache": "^1.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.32",

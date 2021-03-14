@@ -2,34 +2,28 @@
 
 namespace Upstain\AmadeusApiClient\Shopping;
 
-use Upstain\AmadeusApiClient\CacheConfigInterface;
-use Upstain\AmadeusApiClient\Constants\CacheConstant;
 use Upstain\AmadeusApiClient\Exception\AmadeusException;
 use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingRequest;
 use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingResponse;
 use Upstain\AmadeusApiClient\RequestBase;
 
+/**
+ * @extends RequestBase<FlightOffersPricingRequest>
+ */
 class FlightOffersPricing extends RequestBase
 {
     /**
      * @param FlightOffersPricingRequest $flightOffersPricingRequest
-     * @param CacheConfigInterface|null $cacheConfig
+     *
      * @return FlightOffersPricingResponse
+     *
      * @throws AmadeusException
      */
-    public function post(
-        FlightOffersPricingRequest $flightOffersPricingRequest,
-        ?CacheConfigInterface $cacheConfig = null
-    ): FlightOffersPricingResponse {
-        $response = new FlightOffersPricingResponse();
-        $response->setRawResponse($this->getRawResponse(
-            $flightOffersPricingRequest,
-            CacheConstant::AMADEUS_FLIGHT_OFFERS_PRICING_CACHE,
-            new \DateInterval('PT12H'),
-            $cacheConfig
-        ));
-
-        return $response;
+    public function post(FlightOffersPricingRequest $flightOffersPricingRequest): FlightOffersPricingResponse
+    {
+        return new FlightOffersPricingResponse(
+            $this->getRawResponse($flightOffersPricingRequest)
+        );
     }
 
     /**
@@ -41,11 +35,15 @@ class FlightOffersPricing extends RequestBase
             return [];
         }
 
-        $response = $this->httpClient->request(
+        $response = $this->client->getHttpClient()->request(
             'POST',
             $this->client->getConfiguration()->getBaseUrl() . '/v1/shopping/flight-offers/pricing',
             [
                 'body' => \json_encode($request->toArray(), JSON_THROW_ON_ERROR),
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                    'Authorization' => $this->client->getTokenType() . ' ' . $this->client->getAccessToken(),
+                ],
             ],
         );
 
@@ -55,16 +53,8 @@ class FlightOffersPricing extends RequestBase
     /**
      * {@inheritDoc}
      */
-    protected function throwCacheError(\Throwable $e): void
+    protected function throwException(\Throwable $e): AmadeusException
     {
-        throw AmadeusException::flightOffersPricingCacheError($e);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function throwException(\Throwable $e): void
-    {
-        throw AmadeusException::flightOffersPricingError($e);
+        return AmadeusException::flightOffersPricingError($e);
     }
 }

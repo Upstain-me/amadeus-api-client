@@ -2,33 +2,46 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class FlightEndpoint
- *
- * @method string getIataCode()
- * @method string getTerminal()
- * @method string getAt()
- */
 class FlightEndpoint extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $iataCode;
+    protected $iataCode;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $terminal;
+    protected $terminal;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $at;
+    protected $at;
+
+    /**
+     * @return string
+     */
+    public function getIataCode()
+    {
+        return $this->iataCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTerminal()
+    {
+        return $this->terminal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAt()
+    {
+        return $this->at;
+    }
 }

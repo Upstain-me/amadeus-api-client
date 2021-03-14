@@ -2,89 +2,40 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffersSearch;
 
-use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\Setter;
-
-/**
- * Class FlightOffersSearchRequest
- *
- * @method string getOriginLocationCode()
- * @method void setOriginLocationCode(string $originLocationCode)
- * @method string getDestinationLocationCode()
- * @method void setDestinationLocationCode(string $destinationLocationCode)
- * @method \DateTimeInterface getDepartureDate()
- * @method void setDepartureDate(\DateTimeInterface $departureDate)
- * @method \DateTimeInterface|null getReturnDate()
- * @method void setReturnDate(\DateTimeInterface|null $returnDate)
- * @method int getAdults()
- * @method void setAdults(int $adults)
- * @method int getChildren()
- * @method void setChildren(int $children)
- * @method int getInfants()
- * @method void setInfants(int $infants)
- * @method string|null getTravelClass()
- * @method void setTravelClass(string|null $travelClass)
- * @method string[] getIncludedAirlineCodes()
- * @method void setIncludedAirlineCodes(string[] $includedAirlineCodes)
- * @method string[] getExcludedAirlineCodes()
- * @method void setExcludedAirlineCodes(string[] $excludedAirlineCodes)
- * @method bool isNonStop()
- * @method void setNonStop(bool $nonStop)
- * @method string getCurrencyCode()
- * @method void setCurrencyCode(string $currencyCode)
- * @method int|null getMaxPrice()
- * @method void setMaxPrice(int|null $maxPrice)
- * @method int getMax()
- * @method void setMax(int $max)
- */
 class FlightOffersSearchRequest
 {
     /**
      * @var string
-     * @Getter
-     * @Setter
      */
     private string $originLocationCode;
 
     /**
      * @var string
-     * @Getter
-     * @Setter
      */
     private string $destinationLocationCode;
 
     /**
      * @var \DateTimeInterface
-     * @Getter
-     * @Setter
      */
     private \DateTimeInterface $departureDate;
 
     /**
      * @var \DateTimeInterface|null
-     * @Getter
-     * @Setter
      */
     private ?\DateTimeInterface $returnDate = null;
 
     /**
      * @var int
-     * @Getter
-     * @Setter
      */
     private int $adults = 1;
 
     /**
      * @var int
-     * @Getter
-     * @Setter
      */
     private int $children = 0;
 
     /**
      * @var int
-     * @Getter
-     * @Setter
      */
     private int $infants = 0;
 
@@ -92,43 +43,31 @@ class FlightOffersSearchRequest
      * TODO implement support for enum.
      *
      * @var string|null
-     * @Getter
-     * @Setter
      */
     private ?string $travelClass = null;
 
     /**
      * @var array<string>
-     * @Getter
-     * @Setter
      */
     private array $includedAirlineCodes = [];
 
     /**
      * @var array<string>
-     * @Getter
-     * @Setter
      */
     private array $excludedAirlineCodes = [];
 
     /**
      * @var bool
-     * @Getter
-     * @Setter
      */
     private bool $nonStop = false;
 
     /**
      * @var string
-     * @Getter
-     * @Setter
      */
     private string $currencyCode = 'EUR';
 
     /**
      * @var int|null
-     * @Getter
-     * @Setter
      */
     private ?int $maxPrice = null;
 
@@ -138,6 +77,21 @@ class FlightOffersSearchRequest
      * @Setter
      */
     private int $max = 250;
+
+    /**
+     * @param string $originLocationCode
+     * @param string $destinationLocationCode
+     * @param \DateTimeInterface $departureDate
+     */
+    public function __construct(
+        string $originLocationCode,
+        string $destinationLocationCode,
+        \DateTimeInterface $departureDate
+    ) {
+        $this->originLocationCode = $originLocationCode;
+        $this->destinationLocationCode = $destinationLocationCode;
+        $this->departureDate = $departureDate;
+    }
 
     /**
      * @return array<string, mixed>
@@ -181,5 +135,229 @@ class FlightOffersSearchRequest
             ],
             $optionalArguments
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginLocationCode(): string
+    {
+        return $this->originLocationCode;
+    }
+
+    /**
+     * @param string $originLocationCode
+     */
+    public function setOriginLocationCode(string $originLocationCode): void
+    {
+        $this->originLocationCode = $originLocationCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDestinationLocationCode(): string
+    {
+        return $this->destinationLocationCode;
+    }
+
+    /**
+     * @param string $destinationLocationCode
+     */
+    public function setDestinationLocationCode(string $destinationLocationCode): void
+    {
+        $this->destinationLocationCode = $destinationLocationCode;
+    }
+
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getDepartureDate(): \DateTimeInterface
+    {
+        return $this->departureDate;
+    }
+
+    /**
+     * @param \DateTimeInterface $departureDate
+     */
+    public function setDepartureDate(\DateTimeInterface $departureDate): void
+    {
+        $this->departureDate = $departureDate;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getReturnDate(): ?\DateTimeInterface
+    {
+        return $this->returnDate;
+    }
+
+    /**
+     * @param \DateTimeInterface|null $returnDate
+     */
+    public function setReturnDate(?\DateTimeInterface $returnDate): void
+    {
+        $this->returnDate = $returnDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdults(): int
+    {
+        return $this->adults;
+    }
+
+    /**
+     * @param int $adults
+     */
+    public function setAdults(int $adults): void
+    {
+        $this->adults = $adults;
+    }
+
+    /**
+     * @return int
+     */
+    public function getChildren(): int
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param int $children
+     */
+    public function setChildren(int $children): void
+    {
+        $this->children = $children;
+    }
+
+    /**
+     * @return int
+     */
+    public function getInfants(): int
+    {
+        return $this->infants;
+    }
+
+    /**
+     * @param int $infants
+     */
+    public function setInfants(int $infants): void
+    {
+        $this->infants = $infants;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTravelClass(): ?string
+    {
+        return $this->travelClass;
+    }
+
+    /**
+     * @param string|null $travelClass
+     */
+    public function setTravelClass(?string $travelClass): void
+    {
+        $this->travelClass = $travelClass;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getIncludedAirlineCodes(): array
+    {
+        return $this->includedAirlineCodes;
+    }
+
+    /**
+     * @param string[] $includedAirlineCodes
+     */
+    public function setIncludedAirlineCodes(array $includedAirlineCodes): void
+    {
+        $this->includedAirlineCodes = $includedAirlineCodes;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExcludedAirlineCodes(): array
+    {
+        return $this->excludedAirlineCodes;
+    }
+
+    /**
+     * @param string[] $excludedAirlineCodes
+     */
+    public function setExcludedAirlineCodes(array $excludedAirlineCodes): void
+    {
+        $this->excludedAirlineCodes = $excludedAirlineCodes;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNonStop(): bool
+    {
+        return $this->nonStop;
+    }
+
+    /**
+     * @param bool $nonStop
+     */
+    public function setNonStop(bool $nonStop): void
+    {
+        $this->nonStop = $nonStop;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyCode(): string
+    {
+        return $this->currencyCode;
+    }
+
+    /**
+     * @param string $currencyCode
+     */
+    public function setCurrencyCode(string $currencyCode): void
+    {
+        $this->currencyCode = $currencyCode;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getMaxPrice(): ?int
+    {
+        return $this->maxPrice;
+    }
+
+    /**
+     * @param int|null $maxPrice
+     */
+    public function setMaxPrice(?int $maxPrice): void
+    {
+        $this->maxPrice = $maxPrice;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMax(): int
+    {
+        return $this->max;
+    }
+
+    /**
+     * @param int $max
+     */
+    public function setMax(int $max): void
+    {
+        $this->max = $max;
     }
 }

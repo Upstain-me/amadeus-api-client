@@ -2,19 +2,20 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Aircraft
- *
- * @method string getCode()
- */
 class Aircraft extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $code;
+    protected $code;
+
+    /**
+     * @return string
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 }

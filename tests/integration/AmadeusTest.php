@@ -5,47 +5,73 @@ namespace Upstain\AmadeusApiClient\Tests\Integration;
 use Codeception\Test\Unit;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Contracts\Cache\CacheInterface;
-use Upstain\AmadeusApiClient\Amadeus;
-use Upstain\AmadeusApiClient\AuthenticatedClient;
-use Upstain\AmadeusApiClient\CacheConfigInterface;
-use Upstain\AmadeusApiClient\CacheKeyGeneratorInterface;
+use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Upstain\AmadeusApiClient\Client;
 use Upstain\AmadeusApiClient\Configuration;
 use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingRequest;
 use Upstain\AmadeusApiClient\Model\FlightOffersSearch\FlightOffersSearchRequest;
-use Upstain\AmadeusApiClient\PlumbokTrait;
 
 class AmadeusTest extends Unit
 {
-    use PlumbokTrait;
     use ProphecyTrait;
 
-    public function testAuthenticate()
+    /**
+     * @var Configuration
+     */
+    private $config;
+
+    public function _before(): void
     {
-        $config = new Configuration();
-        $config->setClientId($_ENV['AMADEUS_API_CLIENT_ID']);
-        $config->setClientSecret($_ENV['AMADEUS_API_CLIENT_SECRET']);
-        $amadeus = new Amadeus();
-        $authenticatedClient = $amadeus->configure($config)->authenticate();
-
-        self::assertEquals('Bearer', $authenticatedClient->getTokenType());
-
-        return $authenticatedClient;
+        $this->config = new Configuration(
+            'https://test.api.amadeus.com',
+            $_ENV['AMADEUS_API_CLIENT_ID'],
+            $_ENV['AMADEUS_API_CLIENT_SECRET'],
+        );
     }
 
-    /**
-     * @depends testAuthenticate
-     * @param AuthenticatedClient $authenticatedClient
-     * @throws \Upstain\AmadeusApiClient\Exception\AmadeusException
-     */
-    public function testFlightOffersSearch(AuthenticatedClient $authenticatedClient)
+    public function testAuthenticate(): void
     {
-        $request = new FlightOffersSearchRequest();
-        $request->setOriginLocationCode('SYD');
-        $request->setDestinationLocationCode('BKK');
-        $request->setDepartureDate(new \DateTime());
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any())->willReturn(null);
+        $cache->set(Argument::any(), Argument::any())->willReturn(function () {
+            // no-op
+        });
+        $amadeus = new Client($this->config, $cache->reveal(), HttpClient::create());
+        $authenticatedClient = $amadeus->authenticate();
+
+        self::assertEquals('Bearer', $authenticatedClient->getTokenType());
+    }
+
+    public function testFlightOffersSearch(): void
+    {
+        $response = $this->getJson('flightOffersSearch/response.json');
+        $client = $this->prophesize(HttpClientInterface::class);
+
+        $responseObject = $this->prophesize(ResponseInterface::class);
+        $responseObject->toArray()->willReturn($response);
+        $client->request(Argument::any(), Argument::any(), Argument::any())->willReturn($responseObject->reveal());
+
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any())->willReturn([
+            'expires_in' => 'expires_in',
+            'token_type' => 'token_type',
+            'access_token' => 'access_token',
+        ]);
+
+        $amadeus = new Client($this->config, $cache->reveal(), $client->reveal());
+        $authenticatedClient = $amadeus->authenticate();
+
+        $request = new FlightOffersSearchRequest(
+            'SYD',
+            'BKK',
+            new \DateTime(),
+        );
         $request->setAdults(1);
-        $response = $authenticatedClient->shopping()->flightOfferSearch()->get($request, $this->getCacheConfig())->transformRawResponse();
+        $response = $authenticatedClient->shopping()->flightOfferSearch()->get($request);
+        $response = $response->transformRawResponse($response->getRawResponse());
 
         self::assertEquals(250, $response->getMeta()->getCount());
         self::assertEquals($response->getRawResponse()['dictionaries']['locations'], $response->getDictionaries()->getLocations());
@@ -53,75 +79,46 @@ class AmadeusTest extends Unit
         self::assertCount(250, $response->getData());
     }
 
-    /**
-     * @depends testAuthenticate
-     */
-    public function testFlightOffersPricing(AuthenticatedClient $authenticatedClient)
+    public function testFlightOffersPricing(): void
     {
+        $response = $this->getJson('flightOffersPricing/response.json');
+
+        $client = $this->prophesize(HttpClientInterface::class);
+
+        $responseObject = $this->prophesize(ResponseInterface::class);
+        $responseObject->toArray()->willReturn($response);
+        $client->request(Argument::any(), Argument::any(), Argument::any())->willReturn($responseObject->reveal());
+
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any())->willReturn([
+            'expires_in' => 'expires_in',
+            'token_type' => 'token_type',
+            'access_token' => 'access_token',
+        ]);
+
+        $amadeus = new Client($this->config, $cache->reveal(), $client->reveal());
+        $authenticatedClient = $amadeus->authenticate();
+
         $request = new FlightOffersPricingRequest();
 
         $body = $this->getJson('flightOffersPricing/request.json');
         $fromArray = $request->fromArray($body);
 
-        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray, $this->getCacheConfigPricing());
-
-        self::assertEquals('flight-offers-pricing', $fromArray->getData()->getType());
-        self::assertEquals('flight-offer', $fromArray->getData()->getFlightOffers()[0]->getType());
+        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray);
+        $response = $response->transformRawResponse($response->getRawResponse());
 
         self::assertEquals('flight-offers-pricing', $response->getRawResponse()['data']['type']);
 
-        self::assertEquals('PricingOrFareBasisDiscrepancyWarning', $response->transformRawResponse()->getWarnings()[0]->getTitle());
+        self::assertEquals('PricingOrFareBasisDiscrepancyWarning', $response->getWarnings()[0]->getTitle());
     }
 
     /**
-     * @return \Prophecy\Prophecy\ObjectProphecy|CacheConfigInterface
-     * @throws \JsonException
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function getCacheConfigPricing()
-    {
-        $response = $this->getJson('flightOffersPricing/response.json');
-        $cache = $this->prophesize(CacheInterface::class);
-        $cache->get(Argument::any(), Argument::any())->willReturn($response);
-
-        $cacheKeyGenerator = $this->prophesize(CacheKeyGeneratorInterface::class);
-        $cacheKeyGenerator->generate()->willReturn('test');
-
-        $cacheConfig = $this->prophesize(CacheConfigInterface::class);
-        $cacheConfig->getCacheKeyGenerator()->willReturn($cacheKeyGenerator->reveal());
-        $cacheConfig->getCache()->willReturn($cache->reveal());
-
-        return $cacheConfig->reveal();
-    }
-
-    /**
-     * @return \Prophecy\Prophecy\ObjectProphecy|CacheConfigInterface
-     * @throws \JsonException
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function getCacheConfig()
-    {
-        $response = $this->getJson('flightOffersSearch/response.json');
-        $cache = $this->prophesize(CacheInterface::class);
-        $cache->get(Argument::any(), Argument::any())->willReturn($response);
-
-        $cacheKeyGenerator = $this->prophesize(CacheKeyGeneratorInterface::class);
-        $cacheKeyGenerator->generate()->willReturn('test');
-
-        $cacheConfig = $this->prophesize(CacheConfigInterface::class);
-        $cacheConfig->getCacheKeyGenerator()->willReturn($cacheKeyGenerator->reveal());
-        $cacheConfig->getCache()->willReturn($cache->reveal());
-
-        return $cacheConfig->reveal();
-    }
-
-    /**
-     * @param $relativePath
+     * @param string $relativePath
      *   Relative path to the _data folder.
      * @return mixed
      * @throws \JsonException
      */
-    private function getJson($relativePath)
+    private function getJson(string $relativePath)
     {
         return \json_decode(
             \file_get_contents(__DIR__ . '/../_data/' . $relativePath),

@@ -2,49 +2,34 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class TravelerPricing
- *
- * @method string getTravelerId()
- * @method string getFareOption()
- * @method string getTravelerType()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Price getPrice()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\FareDetail[] getFareDetailsBySegment()
- */
 class TravelerPricing extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $travelerId;
+    protected $travelerId;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $fareOption;
+    protected $fareOption;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $travelerType;
+    protected $travelerType;
 
     /**
      * @var Price
-     * @Getter
      */
-    protected Price $price;
+    protected $price;
 
     /**
      * @var FareDetail[]
-     * @Getter
      */
-    protected array $fareDetailsBySegment;
+    protected $fareDetailsBySegment;
 
     public function __construct($data)
     {
@@ -61,5 +46,45 @@ class TravelerPricing extends FromArrayModelBase
                 $this->fareDetailsBySegment[] = new FareDetail($fareDetail);
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTravelerId()
+    {
+        return $this->travelerId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFareOption()
+    {
+        return $this->fareOption;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTravelerType()
+    {
+        return $this->travelerType;
+    }
+
+    /**
+     * @return Price
+     */
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    /**
+     * @return FareDetail[]
+     */
+    public function getFareDetailsBySegment()
+    {
+        return $this->fareDetailsBySegment;
     }
 }

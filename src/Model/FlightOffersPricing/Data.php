@@ -2,23 +2,14 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffersPricing;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FlightOffers\FlightOffer;
-use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Data
- *
- * @method string getType()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffer[] getFlightOffers()
- */
-class Data extends FromArrayModelBase
+class Data
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $type;
+    protected $type;
 
     /**
      * @var mixed
@@ -26,24 +17,20 @@ class Data extends FromArrayModelBase
     protected $bookingRequirements;
 
     /**
-     * @var FlightOffer[]
-     * @Getter
+     * @var array<int, FlightOffer|mixed>
      */
-    protected array $flightOffers;
+    protected $flightOffers;
 
-    public function __construct($data)
+    /**
+     * @param string $type
+     * @param mixed $bookingRequirements
+     * @param FlightOffer[] $flightOffers
+     */
+    public function __construct(string $type, $bookingRequirements, array $flightOffers)
     {
-        $excludedProperties = [
-            'type',
-            'bookingRequirements',
-        ];
-        parent::__construct($data, $excludedProperties);
-
-        if (isset($data['flightOffers'])) {
-            foreach ($data['flightOffers'] as $flightOffer) {
-                $this->flightOffers[] = new FlightOffer($flightOffer);
-            }
-        }
+        $this->type = $type;
+        $this->bookingRequirements = $bookingRequirements;
+        $this->flightOffers = $flightOffers;
     }
 
     /**
@@ -52,5 +39,21 @@ class Data extends FromArrayModelBase
     public function getBookingRequirements()
     {
         return $this->bookingRequirements;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return array<int, mixed>|FlightOffer[]
+     */
+    public function getFlightOffers()
+    {
+        return $this->flightOffers;
     }
 }

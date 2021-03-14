@@ -2,19 +2,12 @@
 
 namespace Upstain\AmadeusApiClient\Exception;
 
-use Plumbok\Annotation\Getter;
 use Throwable;
 
-/**
- * Class AmadeusException
- *
- * @method int getErrorCode()
- */
 final class AmadeusException extends \Exception
 {
     /**
      * @var int
-     * @Getter
      */
     private int $errorCode;
 
@@ -35,17 +28,18 @@ final class AmadeusException extends \Exception
         $this->errorCode = $errorCode;
     }
 
+    /**
+     * @return int
+     */
+    public function getErrorCode(): int
+    {
+        return $this->errorCode;
+    }
+
     public static function authError(\Throwable $e): AmadeusException
     {
         $message = 'Amadeus Auth error: ' . $e->getMessage();
         return new AmadeusException(ExceptionCode::AUTH, $message, $e->getCode(), $e);
-    }
-
-    public static function authCacheError(\Throwable $e): AmadeusException
-    {
-        $message = 'Amadeus Auth cache error: ' . $e->getMessage();
-
-        return new AmadeusException(ExceptionCode::AUTH, $message, $e->getCode());
     }
 
     public static function jsonError(\Throwable $e): AmadeusException
@@ -59,23 +53,9 @@ final class AmadeusException extends \Exception
         return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_SEARCH, $message, $e->getCode(), $e);
     }
 
-    public static function flightOffersSearchCacheError(\Throwable $e): AmadeusException
-    {
-        $message = 'Flight Offers Search cache error: ' . $e->getMessage();
-
-        return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_SEARCH, $message, $e->getCode());
-    }
-
     public static function flightOffersPricingError(\Throwable $e): AmadeusException
     {
         $message = 'Flight Offers Pricing error: ' . $e->getMessage();
         return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_PRICING, $message, $e->getCode(), $e);
-    }
-
-    public static function flightOffersPricingCacheError(\Throwable $e): AmadeusException
-    {
-        $message = 'Flight Offers Pricing cache error: ' . $e->getMessage();
-
-        return new AmadeusException(ExceptionCode::FLIGHT_OFFERS_PRICING, $message, $e->getCode());
     }
 }

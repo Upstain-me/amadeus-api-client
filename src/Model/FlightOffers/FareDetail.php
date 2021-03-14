@@ -2,66 +2,97 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class FareDetail
- *
- * @method string getSegmentId()
- * @method string getCabin()
- * @method string getFareBasis()
- * @method string getBrandedFare()
- * @method string getClass()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\IncludedCheckedBags getIncludedCheckedBags()
- */
 class FareDetail extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $segmentId;
+    protected $segmentId;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $cabin;
+    protected $cabin;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $fareBasis;
+    protected $fareBasis;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $brandedFare;
+    protected $brandedFare;
 
     /**
      * @var string
-     * @Getter
      */
-    protected string $class;
+    protected $class;
 
     /**
      * @var IncludedCheckedBags
-     * @Getter
      */
-    protected IncludedCheckedBags $includedCheckedBags;
+    protected $includedCheckedBags;
 
     public function __construct($data)
     {
         $excludedProperties = [
-            'includedCheckedBags'
+            'includedCheckedBags',
         ];
         parent::__construct($data, $excludedProperties);
 
         if ($data['includedCheckedBags']) {
             $this->includedCheckedBags = new IncludedCheckedBags($data['includedCheckedBags']);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getSegmentId()
+    {
+        return $this->segmentId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCabin()
+    {
+        return $this->cabin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFareBasis()
+    {
+        return $this->fareBasis;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBrandedFare()
+    {
+        return $this->brandedFare;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @return IncludedCheckedBags
+     */
+    public function getIncludedCheckedBags()
+    {
+        return $this->includedCheckedBags;
     }
 }

@@ -2,28 +2,19 @@
 
 namespace Upstain\AmadeusApiClient\Model\FlightOffers;
 
-use Plumbok\Annotation\Getter;
 use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
 
-/**
- * Class Itinerary
- *
- * @method string getDuration()
- * @method \Upstain\AmadeusApiClient\Model\FlightOffers\Segment[] getSegments()
- */
 class Itinerary extends FromArrayModelBase
 {
     /**
      * @var string
-     * @Getter
      */
-    protected string $duration;
+    protected $duration;
 
     /**
      * @var Segment[]
-     * @Getter
      */
-    protected array $segments;
+    protected $segments;
 
     /**
      * @param mixed $data
@@ -40,5 +31,21 @@ class Itinerary extends FromArrayModelBase
                 $this->segments[] = new Segment($segment);
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @return Segment[]
+     */
+    public function getSegments()
+    {
+        return $this->segments;
     }
 }
