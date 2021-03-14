@@ -37,6 +37,7 @@ class FlightOffersPricingResponse extends ResponseBase
 
         if (isset($this->rawResponse['data'])) {
             $data = $this->rawResponse['data'];
+            $flightOffers = [];
             if (isset($data['flightOffers'])) {
                 foreach ($data['flightOffers'] as $flightOffer) {
                     $offer = new FlightOffer($flightOffer);

@@ -1,10 +1,44 @@
 name: Upstain PHP Code Quality Workflow
-# This workflow is triggered on pushes to the repository.
 on: [pull_request]
 
 jobs:
   quality:
-    name: Code Quality
+    name: Code Quality PHP8
+    runs-on: ubuntu-latest
+    container: upstain/php:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install
+        run: composer install
+
+      - name: Tests
+        env:
+          AMADEUS_API_CLIENT_ID: ${{ secrets.AMADEUS_API_CLIENT_ID }}
+          AMADEUS_API_CLIENT_SECRET: ${{ secrets.AMADEUS_API_CLIENT_SECRET }}
+        run: cp .env .env.local && vendor/bin/codecept run
+
+      - name: Static Type Analysis
+        run: vendor/bin/phpstan analyse
+
+      - name: Coding standards
+        run: vendor/bin/ecs check
+
+  quality7:
+    name: Code Quality PHP 7.4
     runs-on: ubuntu-latest
     container: upstain/php:latest
 

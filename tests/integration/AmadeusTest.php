@@ -9,7 +9,6 @@ use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Upstain\AmadeusApiClient\AuthenticatedClient;
 use Upstain\AmadeusApiClient\Client;
 use Upstain\AmadeusApiClient\Configuration;
 use Upstain\AmadeusApiClient\Model\FlightOffersPricing\FlightOffersPricingRequest;
