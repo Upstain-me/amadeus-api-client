@@ -54,9 +54,8 @@ abstract class RequestBase
      *
      * @throws AmadeusException
      */
-    protected function getRawResponse($request): ?array
+    protected function getRawResponse($request): array
     {
-        $response = null;
         try {
             return $this->doRequest($request);
         } catch (ClientExceptionInterface |

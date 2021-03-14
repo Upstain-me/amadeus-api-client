@@ -80,42 +80,37 @@ class AmadeusTest extends Unit
         self::assertCount(250, $response->getData());
     }
 
-    public function testFlightOffersPricing(AuthenticatedClient $authenticatedClient)
+    public function testFlightOffersPricing(): void
     {
+        $response = $this->getJson('flightOffersPricing/response.json');
+
+        $client = $this->prophesize(HttpClientInterface::class);
+
+        $responseObject = $this->prophesize(ResponseInterface::class);
+        $responseObject->toArray()->willReturn($response);
+        $client->request(Argument::any(), Argument::any(), Argument::any())->willReturn($responseObject->reveal());
+
+        $cache = $this->prophesize(CacheInterface::class);
+        $cache->get(Argument::any())->willReturn([
+            'expires_in' => 'expires_in',
+            'token_type' => 'token_type',
+            'access_token' => 'access_token',
+        ]);
+
+        $amadeus = new Client($this->config, $cache->reveal(), $client->reveal());
+        $authenticatedClient = $amadeus->authenticate();
+
         $request = new FlightOffersPricingRequest();
 
         $body = $this->getJson('flightOffersPricing/request.json');
         $fromArray = $request->fromArray($body);
 
-        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray, $this->getCacheConfigPricing());
-
-        self::assertEquals('flight-offers-pricing', $fromArray->getData()->getType());
-        self::assertEquals('flight-offer', $fromArray->getData()->getFlightOffers()[0]->getType());
+        $response = $authenticatedClient->shopping()->flightOfferPricing()->post($fromArray);
+        $response = $response->transformRawResponse($response->getRawResponse());
 
         self::assertEquals('flight-offers-pricing', $response->getRawResponse()['data']['type']);
 
-        self::assertEquals('PricingOrFareBasisDiscrepancyWarning', $response->transformRawResponse()->getWarnings()[0]->getTitle());
-    }
-
-    /**
-     * @return \Prophecy\Prophecy\ObjectProphecy|CacheConfigInterface
-     * @throws \JsonException
-     * @throws \Psr\Cache\InvalidArgumentException
-     */
-    private function getCacheConfigPricing()
-    {
-        $response = $this->getJson('flightOffersPricing/response.json');
-        $cache = $this->prophesize(CacheInterface::class);
-        $cache->get(Argument::any(), Argument::any())->willReturn($response);
-
-        $cacheKeyGenerator = $this->prophesize(CacheKeyGeneratorInterface::class);
-        $cacheKeyGenerator->generate()->willReturn('test');
-
-        $cacheConfig = $this->prophesize(CacheConfigInterface::class);
-        $cacheConfig->getCacheKeyGenerator()->willReturn($cacheKeyGenerator->reveal());
-        $cacheConfig->getCache()->willReturn($cache->reveal());
-
-        return $cacheConfig->reveal();
+        self::assertEquals('PricingOrFareBasisDiscrepancyWarning', $response->getWarnings()[0]->getTitle());
     }
 
     /**
