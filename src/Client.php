@@ -6,7 +6,6 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -56,7 +55,7 @@ class Client implements LoggerAwareInterface
      */
     public function authenticate(): AuthenticatedClient
     {
-        $cacheKey = self::AMADEUS_AUTH_CACHE.'_'.$this->getConfiguration()->getClientId();
+        $cacheKey = self::AMADEUS_AUTH_CACHE . '_' . $this->getConfiguration()->getClientId();
         $response = null;
 
         try {

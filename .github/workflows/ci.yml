@@ -40,7 +40,7 @@ jobs:
   quality7:
     name: Code Quality PHP 7.4
     runs-on: ubuntu-latest
-    container: upstain/php:latest
+    container: upstain/php:1.0
 
     steps:
       - uses: actions/checkout@v2

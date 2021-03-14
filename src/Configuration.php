@@ -2,10 +2,6 @@
 
 namespace Upstain\AmadeusApiClient;
 
-use Plumbok\Annotation\Getter;
-use Plumbok\Annotation\Setter;
-use Plumbok\Annotation\ToString;
-
 class Configuration
 {
     /**
