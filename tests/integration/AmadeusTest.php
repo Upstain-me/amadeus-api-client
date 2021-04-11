@@ -36,7 +36,7 @@ class AmadeusTest extends Unit
     {
         $cache = $this->prophesize(CacheInterface::class);
         $cache->get(Argument::any())->willReturn(null);
-        $cache->set(Argument::any(), Argument::any())->willReturn(function () {
+        $cache->set(Argument::any(), Argument::any(), Argument::any())->willReturn(function () {
             // no-op
         });
         $amadeus = new Client($this->config, $cache->reveal(), HttpClient::create());
