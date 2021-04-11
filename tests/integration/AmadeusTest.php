@@ -71,10 +71,13 @@ class AmadeusTest extends Unit
         );
         $request->setAdults(1);
         $response = $authenticatedClient->shopping()->flightOfferSearch()->get($request);
-        $response = $response->transformRawResponse($response->getRawResponse());
+        $response = $response->transformRawResponse();
 
         self::assertEquals(250, $response->getMeta()->getCount());
-        self::assertEquals($response->getRawResponse()['dictionaries']['locations'], $response->getDictionaries()->getLocations());
+        self::assertEquals(
+            $response->getRawResponse()['dictionaries']['locations'],
+            $response->getDictionaries()->getLocations()
+        );
         self::assertEquals('GDS', $response->getData()[0]->getSource());
         self::assertCount(250, $response->getData());
     }
