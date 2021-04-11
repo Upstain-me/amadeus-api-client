@@ -68,7 +68,7 @@ class Client implements LoggerAwareInterface
             $response = $this->auth();
 
             try {
-                $this->cache->set($cacheKey, $response);
+                $this->cache->set($cacheKey, $response, $response['expires_in']);
             } catch (InvalidArgumentException $e) {
                 $this->logger->error('Amadeus cache set error: ' . $e->getMessage());
             }
