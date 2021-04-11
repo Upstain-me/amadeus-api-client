@@ -19,15 +19,13 @@ class FlightOffersSearchResponse extends ResponseBase
     protected array $data;
 
     /**
-     * @param array $rawResponse
      * @param callable|null $responseDataAdapter
      *
      * @return self
      */
-    public function transformRawResponse(array $rawResponse, ?callable $responseDataAdapter = null): self
+    public function transformRawResponse(?callable $responseDataAdapter = null): self
     {
-        $this->rawResponse = $rawResponse;
-        $this->transformDictionaries($rawResponse);
+        $this->transformDictionaries($this->rawResponse);
 
         if (isset($this->rawResponse['meta'])) {
             $this->meta = new Meta($this->rawResponse['meta']);
