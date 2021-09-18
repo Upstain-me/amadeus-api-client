@@ -17,7 +17,6 @@ class FlightOffersSearchResponse
         if (\count($data) > 0) {
             foreach ($data as $offer) {
                 $this->data[] = new FlightOffer($offer);
-                $test =0;
             }
         }
     }

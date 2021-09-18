@@ -17,7 +17,7 @@ class Co2Emission
     public function __construct(array $data)
     {
         $this->weight = $data['weight'] ?? 0;
-        $this->weightUnit = $this->initEnum(WeightUnit::class, $data, 'weightUnit', WeightUnit::KG);
-        $this->cabin = $this->initEnum(TravelClass::class, $data, 'cabin', TravelClass::ECONOMY);
+        $this->initEnumProperty(WeightUnit::class, $data, 'weightUnit', WeightUnit::KG);
+        $this->initEnumProperty(TravelClass::class, $data, 'cabin', TravelClass::ECONOMY);
     }
 }
