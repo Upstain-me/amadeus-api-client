@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Upstain\AmadeusApiClient\V2\Air\Model;
 
-enum TravelClass
+enum TravelClass: string
 {
-    case ECONOMY;
-    case PREMIUM_ECONOMY;
-    case BUSINESS;
-    case FIRST;
+    case ECONOMY = 'ECONOMY';
+    case PREMIUM_ECONOMY = 'PREMIUM_ECONOMY';
+    case BUSINESS = 'BUSINESS';
+    case FIRST = 'FIRST';
 }

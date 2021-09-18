@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Upstain\AmadeusApiClient\V2\Air\Model;
 
-class FlightOffer
+use Upstain\AmadeusApiClient\Model\FromArrayModelBase;
+
+class FlightOffer extends FromArrayModelBase
 {
     public string $type = 'flight-offer';
     public string $id = '';
-    public FlightOfferSource $flightOfferSource = FlightOfferSource::GDS;
+    public FlightOfferSource $source = FlightOfferSource::GDS;
     public bool $instantTicketingRequired = false;
     public bool $disablePricing = false;
     public bool $nonHomogeneous = false;
@@ -34,4 +36,36 @@ class FlightOffer
      * @var TravelerPricing[]
      */
     public array $travelerPricings = [];
+
+    public function __construct(array $data)
+    {
+        $excludedProperties = [
+            'source',
+            'lastTicketingDate',
+            'itineraries',
+            'price',
+            'pricingOptions',
+            'travelerPricings',
+        ];
+        parent::__construct($data, $excludedProperties);
+
+        if (isset($data['source'])) {
+            $source = FlightOfferSource::tryFrom($data['source']);
+            if ($source !== null) {
+                $this->source = $source;
+            }
+        }
+
+        if (isset($data['lastTicketingDate'])) {
+            $this->lastTicketingDate = new \DateTimeImmutable($data['lastTicketingDate']);
+        }
+
+        if (isset($data['itineraries']) && \is_array($data['itineraries']) && \count($data['itineraries']) > 0) {
+            foreach ($data['itineraries'] as $itinerary) {
+                $this->itineraries[] = new Itinerary($itinerary);
+            }
+        }
+
+        $test = 0;
+    }
 }

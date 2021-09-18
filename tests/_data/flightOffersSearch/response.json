@@ -38,7 +38,14 @@
               "duration": "PT2H45M",
               "id": "11",
               "numberOfStops": 0,
-              "blacklistedInEU": false
+              "blacklistedInEU": false,
+              "co2Emissions": [
+                {
+                  "weight": 15,
+                  "weightUnit": "KG",
+                  "cabin": "FIRST"
+                }
+              ]
             },
             {
               "departure": {
